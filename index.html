@@ -1,30 +1,37 @@
-<!-- language: HTML, file: safepal-test.html, target: iOS bare-scheme check -->
+<!-- language: HTML, file: wallet-scheme-test.html, target: iOS bare-scheme matrix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#000000">
-<title>SafePal Scheme Test</title>
+<title>Wallet Scheme Test</title>
 <style>
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0;background:#000;color:#e6e6e6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px}
-  body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-  .card{width:100%;max-width:380px;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:6px;padding:26px 22px;text-align:center}
-  h1{font-size:16px;font-weight:600;margin:0 0 8px;color:#fff}
-  p{font-size:12.5px;color:#6b6b6b;margin:0 0 20px;line-height:1.55;text-align:left}
-  button{width:100%;padding:14px;border:1px solid #e6e6e6;border-radius:6px;background:#e6e6e6;color:#000;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer}
-  button:active{background:#fff}
-  #log{margin-top:18px;padding:12px;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:6px;font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.6;color:#8a8a8a;text-align:left;white-space:pre-wrap;word-break:break-all}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .card{width:100%;max-width:400px;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:6px;padding:22px 18px}
+  h1{font-size:15px;font-weight:600;margin:0 0 6px;color:#fff}
+  p{font-size:12px;color:#6b6b6b;margin:0 0 16px;line-height:1.5}
+  button{width:100%;padding:11px 12px;border:1px solid #222;border-radius:6px;background:#111;color:#e6e6e6;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;margin-bottom:6px;text-align:left}
+  button:active{background:#1a1a1a}
+  #log{margin-top:14px;padding:11px;background:#0f0f0f;border:1px solid #1a1a1a;border-radius:6px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;line-height:1.6;color:#8a8a8a;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-all}
 </style>
 </head>
 <body>
 <div class="card">
-  <h1>SafePal Scheme Test</h1>
-  <p>Tap the button. If SafePal is installed and registers the scheme, the app opens. If not, Safari shows "cannot open the page." One scheme only — bare <b>safepal://</b>, nothing after it.</p>
+  <h1>Wallet Scheme Test</h1>
+  <p>Tap one wallet at a time. Note whether the app opens or Safari errors. Reload the page before the next tap.</p>
 
-  <button id="go">OPEN SAFEPAL</button>
-  <div id="log">ready.</div>
+  <button data-scheme="phantom://">Phantom — phantom://</button>
+  <button data-scheme="safepal://">SafePal — safepal://</button>
+  <button data-scheme="exodus://">Exodus — exodus://</button>
+  <button data-scheme="solflare://">Solflare — solflare://</button>
+  <button data-scheme="backpack://">Backpack — backpack://</button>
+  <button data-scheme="trust://">Trust — trust://</button>
+  <button data-scheme="metamask://">MetaMask — metamask://</button>
+
+  <div id="log">ready. tap a wallet.</div>
 </div>
 
 <script>
@@ -33,28 +40,33 @@ var logEl = document.getElementById("log");
 function log(msg){
   var t = new Date().toISOString().substr(11,8);
   logEl.textContent += "\n[" + t + "] " + msg;
+  logEl.scrollTop = logEl.scrollHeight;
 }
 
-document.getElementById("go").onclick = function(){
-  logEl.textContent = "ready.";
-  log("firing safepal://");
-  var t0 = Date.now();
+var buttons = document.querySelectorAll("button[data-scheme]");
+for (var i = 0; i < buttons.length; i++){
+  buttons[i].addEventListener("click", function(){
+    var scheme = this.getAttribute("data-scheme");
+    var name = this.textContent.trim();
+    logEl.textContent = "ready.";
+    log("firing " + scheme);
+    var t0 = Date.now();
 
-  try {
-    window.location.href = "safepal://";
-  } catch(e){
-    log("error on assign: " + e.message);
-  }
-
-  setTimeout(function(){
-    if (document.hidden) {
-      log("SUCCESS — page backgrounded, SafePal opened");
-    } else {
-      log("FAIL — page still visible after " + (Date.now()-t0) + "ms");
-      log("SafePal either not installed or does not register the scheme");
+    try {
+      window.location.href = scheme;
+    } catch(e){
+      log("error: " + e.message);
     }
-  }, 1800);
-};
+
+    setTimeout(function(){
+      if (document.hidden){
+        log("SUCCESS — " + name + " opened (page backgrounded)");
+      } else {
+        log("FAIL — page still visible after " + (Date.now()-t0) + "ms");
+      }
+    }, 1800);
+  });
+}
 </script>
 </body>
 </html>
